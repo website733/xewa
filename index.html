@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💩 CacaFinder — Moteur de Recherche Ultime</title>
+  <title>💩 CacaFinder</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -45,21 +45,6 @@
     h1 span { color: var(--brown-mid); }
     .tagline { color: var(--brown-light); font-size: 1.05rem; font-weight: 700; margin-top: 0.4rem; letter-spacing: 0.05em; text-transform: uppercase; }
 
-    /* API Key */
-    .apikey-section { margin: 2rem 0 1rem; animation: dropIn 0.8s 0.1s cubic-bezier(.34,1.56,.64,1) both; }
-    .apikey-box { background: #fff; border: 3px solid var(--brown-dark); border-radius: 20px; padding: 1.3rem 1.5rem; box-shadow: 4px 6px 0 var(--brown-dark); }
-    .apikey-box label { display: block; font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: var(--brown-dark); margin-bottom: 0.6rem; }
-    .apikey-row { display: flex; border-radius: 50px; overflow: hidden; border: 2px solid var(--brown-dark); }
-    .apikey-row input { flex: 1; padding: 0.75rem 1.2rem; font-family: 'Nunito', sans-serif; font-size: 0.97rem; font-weight: 700; border: none; outline: none; background: var(--cream); color: var(--brown-dark); }
-    .apikey-row input::placeholder { color: #c8a87a; }
-    .apikey-row button { background: var(--brown-dark); color: var(--accent); border: none; padding: 0 1.5rem; font-family: 'Fredoka One', cursive; font-size: 1rem; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
-    .apikey-row button:hover { background: var(--brown-mid); }
-    .apikey-hint { margin-top: 0.6rem; font-size: 0.8rem; color: var(--brown-light); font-weight: 600; }
-    .apikey-hint a { color: var(--brown-mid); }
-    .key-saved { display: inline-flex; align-items: center; gap: 0.4rem; background: #e8f5e9; border: 2px solid #388e3c; border-radius: 30px; padding: 0.25rem 1rem; font-size: 0.82rem; font-weight: 800; color: #2e7d32; cursor: pointer; transition: opacity 0.2s; }
-    .key-saved:hover { opacity: 0.7; }
-
-    /* Search */
     .search-section { margin: 2.5rem 0 2rem; animation: dropIn 0.8s 0.15s cubic-bezier(.34,1.56,.64,1) both; }
     .search-box { display: flex; border-radius: 60px; overflow: hidden; box-shadow: 0 8px 32px var(--shadow), 0 2px 0 var(--brown-light); border: 3px solid var(--brown-dark); }
     .search-box input { flex: 1; padding: 1rem 1.5rem; font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 700; border: none; outline: none; background: #fff; color: var(--brown-dark); }
@@ -67,16 +52,17 @@
     .search-box button { background: var(--brown-dark); color: var(--accent); border: none; padding: 0 2rem; font-family: 'Fredoka One', cursive; font-size: 1.15rem; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap; }
     .search-box button:hover { background: var(--brown-mid); }
     .search-box button:active { transform: scale(0.96); }
+    .search-box button:disabled { opacity: 0.6; cursor: not-allowed; }
+
     .quick-tags { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
     .tag { background: var(--brown-dark); color: var(--accent); border: none; padding: 0.35rem 1rem; border-radius: 30px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
     .tag:hover { background: var(--brown-mid); transform: translateY(-2px); }
+    .tag:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    /* Status */
     .status { text-align: center; padding: 1rem; font-weight: 700; color: var(--brown-mid); font-size: 1rem; min-height: 2rem; }
     .spinner { display: inline-block; width: 26px; height: 26px; border: 4px solid var(--accent); border-top-color: var(--brown-dark); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 0.5rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Results */
     .results-header { font-family: 'Fredoka One', cursive; color: var(--brown-dark); font-size: 1.4rem; margin-bottom: 1.2rem; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
     .card { background: var(--card-bg); border-radius: 20px; border: 3px solid var(--brown-dark); overflow: hidden; box-shadow: 4px 6px 0 var(--brown-dark); transition: transform 0.18s, box-shadow 0.18s; animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) both; }
@@ -85,7 +71,8 @@
       from { opacity: 0; transform: scale(0.7) rotate(-4deg); }
       to   { opacity: 1; transform: scale(1) rotate(0deg); }
     }
-    .card img { width: 100%; height: 190px; object-fit: cover; display: block; background: #e8d5b7; }
+    .card-thumb { width: 100%; height: 190px; object-fit: cover; display: block; background: #e8d5b7; }
+    .card-thumb-placeholder { width: 100%; height: 190px; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: #f5e6cf; }
     .card-body { padding: 0.8rem 1rem 1rem; }
     .card-title { font-weight: 800; color: var(--brown-dark); font-size: 0.95rem; line-height: 1.4; margin-bottom: 0.3rem; }
     .card-desc  { font-size: 0.8rem; color: #7a5c3a; font-weight: 600; margin-bottom: 0.3rem; }
@@ -96,6 +83,7 @@
     .ai-answer strong { color: var(--brown-mid); }
     .empty { text-align: center; padding: 3rem 1rem; color: var(--brown-light); font-size: 3rem; }
     .empty p { font-size: 1rem; font-weight: 700; margin-top: 0.5rem; }
+    .error-box { background: #fff3f3; border: 3px solid #c62828; border-radius: 20px; padding: 1rem 1.5rem; color: #b71c1c; font-weight: 700; margin-top: 1rem; }
     footer { text-align: center; margin-top: 3rem; font-size: 0.8rem; color: var(--brown-light); font-weight: 700; letter-spacing: 0.04em; }
   </style>
 </head>
@@ -110,32 +98,12 @@
     <p class="tagline">Le moteur de recherche ultime pour les photos de caca 💩</p>
   </header>
 
-  <!-- Section clé API -->
-  <section class="apikey-section" id="apikeySection">
-    <div class="apikey-box">
-      <label for="apiKey">🔑 Entre ta clé API Anthropic pour commencer</label>
-      <div class="apikey-row">
-        <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off" />
-        <button onclick="saveKey()">Valider ✓</button>
-      </div>
-      <p class="apikey-hint">
-        Obtiens ta clé gratuitement sur
-        <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>
-        · Stockée dans ton navigateur, jamais envoyée ailleurs que l'API Anthropic.
-      </p>
-    </div>
-  </section>
-
-  <!-- Section recherche (cachée jusqu'à validation de la clé) -->
-  <section class="search-section" id="searchSection">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:0.7rem">
-      <div id="keyIndicator"></div>
-    </div>
+  <section class="search-section">
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Ex: caca de chien, caca de panda..." value="caca" />
-      <button onclick="search()">🔍 Chercher</button>
+      <input type="text" id="searchInput" placeholder="Ex: caca de chien, caca de panda..." />
+      <button id="searchBtn" onclick="search()">🔍 Chercher</button>
     </div>
-    <div class="quick-tags">
+    <div class="quick-tags" id="tagsRow">
       <button class="tag" onclick="quickSearch('caca de chien')">🐕 Chien</button>
       <button class="tag" onclick="quickSearch('caca de chat')">🐈 Chat</button>
       <button class="tag" onclick="quickSearch('caca de panda')">🐼 Panda</button>
@@ -143,7 +111,6 @@
       <button class="tag" onclick="quickSearch('caca fossile')">🦴 Fossile</button>
       <button class="tag" onclick="quickSearch('caca de baleine')">🐳 Baleine</button>
       <button class="tag" onclick="quickSearch('emoji caca')">💩 Emoji</button>
-      <button class="tag" onclick="changeKey()">🔑 Changer la clé</button>
     </div>
   </section>
 
@@ -155,89 +122,50 @@
 
 <script>
   /* ── Floating emojis ── */
-  const bgContainer = document.getElementById('bgEmojis');
-  ['💩','💩','💩','🚽','🧻'].forEach(() => {
-    for (let i = 0; i < 4; i++) {
-      const el = document.createElement('span');
-      el.textContent = ['💩','🚽','🧻'][Math.floor(Math.random()*3)];
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.animationDuration = (12 + Math.random() * 20) + 's';
-      el.style.animationDelay = (Math.random() * 20) + 's';
-      el.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
-      bgContainer.appendChild(el);
-    }
-  });
-
-  /* ── API Key ── */
-  const KEY = 'cacafinder_key';
-
-  function saveKey() {
-    const val = document.getElementById('apiKey').value.trim();
-    if (!val.startsWith('sk-ant-')) {
-      alert('❌ La clé doit commencer par "sk-ant-"');
-      return;
-    }
-    localStorage.setItem(KEY, val);
-    showSearch();
+  const bg = document.getElementById('bgEmojis');
+  const pool = ['💩','💩','💩','🚽','🧻'];
+  for (let i = 0; i < 22; i++) {
+    const el = document.createElement('span');
+    el.textContent = pool[Math.floor(Math.random() * pool.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (12 + Math.random() * 20) + 's';
+    el.style.animationDelay = (Math.random() * 20) + 's';
+    el.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
+    bg.appendChild(el);
   }
 
-  function changeKey() {
-    localStorage.removeItem(KEY);
-    document.getElementById('apikeySection').style.display = '';
-    document.getElementById('searchSection').style.display = 'none';
-    document.getElementById('results').innerHTML = '';
-    document.getElementById('status').innerHTML = '';
-    document.getElementById('apiKey').value = '';
-  }
-
-  function getKey() { return localStorage.getItem(KEY) || ''; }
-
-  function showSearch() {
-    document.getElementById('apikeySection').style.display = 'none';
-    document.getElementById('searchSection').style.display = '';
-    const k = getKey();
-    document.getElementById('keyIndicator').innerHTML =
-      `<span class="key-saved" onclick="changeKey()">✅ ${k.slice(0,14)}… · changer</span>`;
-  }
-
-  // Init
-  document.getElementById('searchSection').style.display = 'none';
-  if (getKey()) showSearch();
-  document.getElementById('apiKey').addEventListener('keydown', e => { if (e.key === 'Enter') saveKey(); });
   document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
 
-  /* ── Search ── */
   function quickSearch(q) {
     document.getElementById('searchInput').value = q;
     search();
   }
 
+  function setLoading(on) {
+    document.getElementById('searchBtn').disabled = on;
+    document.querySelectorAll('.tag').forEach(t => t.disabled = on);
+    document.getElementById('status').innerHTML = on
+      ? '<span class="spinner"></span> L\'IA cherche du caca pour toi...'
+      : '';
+  }
+
   async function search() {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) return;
-    const apiKey = getKey();
-    if (!apiKey) { alert('Entre ta clé API d\'abord !'); return; }
 
-    const status  = document.getElementById('status');
-    const results = document.getElementById('results');
-    status.innerHTML = '<span class="spinner"></span> L\'IA cherche du caca pour toi...';
-    results.innerHTML = '';
+    setLoading(true);
+    document.getElementById('results').innerHTML = '';
 
     try {
-      const fullQuery = query.toLowerCase().includes('caca') ? query : `caca ${query}`;
+      const fullQuery = /caca/i.test(query) ? query : `caca ${query}`;
 
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
           max_tokens: 1000,
-          system: `Tu es CacaFinder, un moteur de recherche spécialisé dans les photos de caca.
+          system: `Tu es CacaFinder, un moteur de recherche spécialisé dans les photos de caca (fèces, excréments).
 Réponds UNIQUEMENT en JSON valide, sans markdown ni backticks.
 Format:
 {
@@ -275,12 +203,14 @@ Trouve 4 à 6 résultats avec de vraies URLs d'images accessibles publiquement v
         else throw new Error('Réponse inattendue de l\'IA');
       }
 
-      status.innerHTML = '';
       render(parsed, query);
 
     } catch (err) {
-      status.innerHTML = `😱 <strong>Erreur :</strong> ${esc(err.message)}`;
+      document.getElementById('results').innerHTML =
+        `<div class="error-box">😱 <strong>Erreur :</strong> ${esc(err.message)}</div>`;
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -297,12 +227,11 @@ Trouve 4 à 6 résultats avec de vraies URLs d'images accessibles publiquement v
     } else {
       html += `<div class="results-header">💩 ${items.length} résultat${items.length > 1 ? 's' : ''} trouvé${items.length > 1 ? 's' : ''}</div><div class="grid">`;
       items.forEach((item, i) => {
-        const thumb = item.imageUrl
-          ? `<img src="${esc(item.imageUrl)}" alt="${esc(item.title||'')}" loading="lazy" onerror="this.style.display='none'" />`
-          : `<div style="height:190px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:#f5e6cf">💩</div>`;
         html += `
           <div class="card" style="animation-delay:${i * 0.07}s">
-            ${thumb}
+            ${item.imageUrl
+              ? `<img class="card-thumb" src="${esc(item.imageUrl)}" alt="${esc(item.title||'')}" loading="lazy" onerror="this.outerHTML='<div class=card-thumb-placeholder>💩</div>'" />`
+              : `<div class="card-thumb-placeholder">💩</div>`}
             <div class="card-body">
               <div class="card-title">${esc(item.title || 'Photo de caca')}</div>
               ${item.description ? `<div class="card-desc">${esc(item.description)}</div>` : ''}
