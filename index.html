@@ -1,467 +1,392 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dossier INFOS PEDOS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Cinzel+Decorative:wght@400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.18);
+      --bg: #0b0a08;
+      --text: #f0ead6;
+      --muted: rgba(240,234,214,0.35);
+    }
 
-<title>Réseau Pub France</title>
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    body {
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      cursor: default;
+    }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    /* ── Noise grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-<style>
+    /* ── Radial glow ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201,168,76,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 60% at 50% 110%, rgba(201,168,76,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-:root{
---neon:#25D366;
---metal1:#e3e7ee;
---metal2:#8a92a1;
---bg:#07090c;
-}
+    /* ── Thin corner lines ── */
+    .corner {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeIn 1.4s ease forwards;
+    }
+    .corner::before,
+    .corner::after {
+      content: '';
+      position: absolute;
+      background: var(--gold);
+    }
+    .corner::before { width: 1px; height: 100%; }
+    .corner::after  { width: 100%; height: 1px; }
+    .corner.tl { top: 32px; left: 32px; animation-delay: 0.2s; }
+    .corner.tl::before { top: 0; left: 0; }
+    .corner.tl::after  { top: 0; left: 0; }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+    .corner.tr { top: 32px; right: 32px; animation-delay: 0.3s; }
+    .corner.tr::before { top: 0; right: 0; left: auto; }
+    .corner.tr::after  { top: 0; left: 0; }
 
-body{
-font-family:Poppins,sans-serif;
-background:var(--bg);
-color:white;
-overflow-x:hidden;
-}
+    .corner.bl { bottom: 32px; left: 32px; animation-delay: 0.4s; }
+    .corner.bl::before { bottom: 0; left: 0; top: auto; }
+    .corner.bl::after  { bottom: 0; left: 0; top: auto; }
 
-/* CURSEUR */
+    .corner.br { bottom: 32px; right: 32px; animation-delay: 0.5s; }
+    .corner.br::before { bottom: 0; right: 0; left: auto; top: auto; }
+    .corner.br::after  { bottom: 0; left: 0; top: auto; }
 
-.cursor{
-position:fixed;
-width:18px;
-height:18px;
-border:2px solid var(--neon);
-border-radius:50%;
-pointer-events:none;
-z-index:999;
-transform:translate(-50%,-50%);
-box-shadow:0 0 10px var(--neon);
-}
+    /* ── Horizontal divider lines ── */
+    .line-top,
+    .line-bottom {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.4;
+      z-index: 1;
+      animation: expandLine 1.2s cubic-bezier(0.77,0,0.18,1) 0.6s forwards;
+    }
+    .line-top    { top: 100px; }
+    .line-bottom { bottom: 100px; }
 
-/* CANVAS 3D */
+    @keyframes expandLine {
+      from { width: 0; }
+      to   { width: min(480px, 70vw); }
+    }
 
-#bg{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
-}
+    /* ── Main stage ── */
+    .stage {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 56px;
+      text-align: center;
+      padding: 0 24px;
+    }
 
-/* NAVBAR */
+    /* ── Eyebrow ── */
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(0.65rem, 1.2vw, 0.78rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      animation: riseIn 0.9s ease 0.8s forwards;
+    }
 
-header{
-position:fixed;
-top:0;
-width:100%;
-padding:20px 40px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:rgba(0,0,0,.35);
-backdrop-filter:blur(14px);
-border-bottom:1px solid rgba(255,255,255,.1);
-z-index:100;
-}
+    /* ── Title ── */
+    .title {
+      font-family: 'Cinzel Decorative', serif;
+      font-weight: 400;
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      opacity: 0;
+      animation: riseIn 1s ease 1s forwards;
+      text-shadow: 0 0 80px rgba(201,168,76,0.15);
+    }
 
-.logo{
-font-weight:600;
-letter-spacing:3px;
-background:linear-gradient(120deg,var(--metal1),var(--metal2));
--webkit-background-clip:text;
-color:transparent;
-text-shadow:0 0 15px rgba(255,255,255,.2);
-}
+    .title em {
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 0.55em;
+      color: var(--gold-light);
+      display: block;
+      letter-spacing: 0.18em;
+      margin-top: 10px;
+    }
 
-nav{
-display:flex;
-gap:30px;
-}
+    /* ── Ornament ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      opacity: 0;
+      animation: riseIn 0.8s ease 1.2s forwards;
+    }
+    .ornament span {
+      display: block;
+      height: 1px;
+      width: 48px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+    }
+    .ornament span:last-child {
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .ornament svg {
+      fill: var(--gold);
+      width: 14px;
+      height: 14px;
+      opacity: 0.8;
+    }
 
-nav a{
-text-decoration:none;
-color:white;
-opacity:.7;
-transition:.3s;
-}
+    /* ── Button ── */
+    .btn-wrap {
+      opacity: 0;
+      animation: riseIn 0.9s ease 1.4s forwards;
+    }
 
-nav a:hover{
-color:var(--neon);
-opacity:1;
-text-shadow:0 0 12px var(--neon);
-}
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      outline: none;
+      position: relative;
+    }
 
-/* MENU MOBILE */
+    .btn-inner {
+      position: relative;
+      padding: 18px 52px;
+      border: 1px solid rgba(201,168,76,0.45);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      transition: color 0.4s ease, border-color 0.4s ease;
+      overflow: hidden;
+    }
 
-.menu-btn{
-display:none;
-font-size:26px;
-cursor:pointer;
-}
+    /* Gold fill on hover */
+    .btn-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s cubic-bezier(0.77,0,0.18,1);
+      z-index: 0;
+    }
 
-/* HERO */
+    .btn-inner span {
+      position: relative;
+      z-index: 1;
+      transition: color 0.4s ease;
+    }
 
-.hero{
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-padding:120px 20px;
-}
+    /* Arrow icon */
+    .btn-arrow {
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+      position: relative;
+      transition: width 0.4s ease;
+      flex-shrink: 0;
+    }
+    .btn-arrow::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%) rotate(35deg);
+      width: 8px;
+      height: 1px;
+      background: var(--gold);
+      transform-origin: right center;
+      transition: transform 0.3s ease;
+    }
+    .btn-arrow::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%) rotate(-35deg);
+      width: 8px;
+      height: 1px;
+      background: var(--gold);
+      transform-origin: right center;
+    }
 
-.hero h1{
-font-size:72px;
-background:linear-gradient(120deg,#fff,var(--metal1),var(--metal2));
--webkit-background-clip:text;
-color:transparent;
-text-shadow:
-0 0 20px rgba(255,255,255,.2),
-0 0 40px rgba(37,211,102,.2);
-}
+    /* Hover states */
+    .btn:hover .btn-inner {
+      border-color: var(--gold);
+      color: var(--bg);
+    }
+    .btn:hover .btn-inner::before {
+      transform: scaleX(1);
+    }
+    .btn:hover .btn-arrow {
+      width: 48px;
+    }
 
-.hero p{
-max-width:700px;
-margin:25px auto;
-opacity:.85;
-font-size:18px;
-}
+    /* Corner glow on hover */
+    .btn-inner::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border: 1px solid transparent;
+      box-shadow: 0 0 20px rgba(201,168,76,0);
+      transition: box-shadow 0.4s ease;
+    }
+    .btn:hover .btn-inner::after {
+      box-shadow: 0 0 28px rgba(201,168,76,0.25);
+    }
 
-.join{
-display:inline-block;
-padding:16px 45px;
-border-radius:50px;
-background:linear-gradient(120deg,var(--metal1),var(--metal2));
-color:black;
-font-weight:600;
-text-decoration:none;
-transition:.4s;
-box-shadow:0 0 15px rgba(255,255,255,.2);
-}
+    /* ── Animations ── */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-.join:hover{
-transform:translateY(-6px);
-box-shadow:
-0 0 30px var(--neon),
-0 0 60px var(--neon);
-}
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
 
-/* SECTIONS */
-
-.section{
-max-width:1200px;
-margin:auto;
-padding:110px 20px;
-}
-
-.section h2{
-text-align:center;
-font-size:38px;
-margin-bottom:70px;
-}
-
-/* CARDS */
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:35px;
-}
-
-.card{
-padding:35px;
-border-radius:16px;
-background:rgba(255,255,255,.04);
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,.15);
-transition:.4s;
-position:relative;
-overflow:hidden;
-}
-
-.card::before{
-content:"";
-position:absolute;
-top:0;
-left:-100%;
-width:200%;
-height:100%;
-background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);
-transform:skewX(-30deg);
-transition:.6s;
-}
-
-.card:hover::before{
-left:100%;
-}
-
-.card:hover{
-transform:translateY(-10px);
-box-shadow:
-0 0 20px rgba(255,255,255,.2),
-0 0 40px rgba(37,211,102,.3);
-}
-
-/* INFO */
-
-.info{
-padding:40px;
-border-radius:16px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.1);
-backdrop-filter:blur(10px);
-}
-
-.info a{
-color:var(--neon);
-}
-
-/* FOOTER */
-
-footer{
-text-align:center;
-padding:40px;
-border-top:1px solid rgba(255,255,255,.1);
-margin-top:80px;
-opacity:.7;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:800px){
-
-nav{
-position:absolute;
-top:70px;
-right:0;
-background:#0c0f14;
-flex-direction:column;
-width:200px;
-padding:20px;
-display:none;
-}
-
-nav.active{
-display:flex;
-}
-
-.menu-btn{
-display:block;
-}
-
-}
-
-</style>
-
+    /* ── Floating particles ── */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .particle {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: float var(--dur) ease-in-out var(--delay) infinite;
+    }
+    @keyframes float {
+      0%   { opacity: 0; transform: translateY(0) scale(1); }
+      20%  { opacity: 0.6; }
+      80%  { opacity: 0.3; }
+      100% { opacity: 0; transform: translateY(-80px) scale(0); }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="cursor"></div>
-
-<canvas id="bg"></canvas>
-
-<header>
-
-<div class="logo">RPF</div>
-
-<div class="menu-btn">☰</div>
-
-<nav>
-<a href="#community">Communauté</a>
-<a href="#infos">Informations</a>
-</nav>
-
-</header>
-
-<section class="hero">
-
-<div>
-
-<h1>Réseau Pub France</h1>
-
-<p>
-Communauté WhatsApp dédiée à l’auto-promotion, aux partenariats et aux échanges de visibilité.
-</p>
-
-<a class="join" href="https://chat.whatsapp.com/IpG3CE6858321WWARwDFLC">
-Rejoindre le groupe
-</a>
-
-</div>
-
-</section>
-
-<section id="community" class="section">
-
-<h2>La communauté</h2>
-
-<div class="cards">
-
-<div class="card">
-<h3>Auto-promotion</h3>
-<p>Partage de projets et réseaux.</p>
-</div>
-
-<div class="card">
-<h3>Partenariats</h3>
-<p>Collaboration entre créateurs.</p>
-</div>
-
-<div class="card">
-<h3>Visibilité</h3>
-<p>Échanges de promotion.</p>
-</div>
-
-</div>
-
-</section>
-
-<section id="infos" class="section">
-
-<h2>Informations</h2>
-
-<div class="info">
-
-<p><strong>WhatsApp :</strong></p>
-
-<p>
-<a href="https://chat.whatsapp.com/IpG3CE6858321WWARwDFLC">
-Je rejoins dès maintenant ! 
-</a>
-</p>
-
-<p><strong>Email :</strong> reseaupubfrance@tensi.org</p>
-
-<p><strong>Téléphone admin :</strong> +33 7 81 45 36 72</p>
-
-<p><strong>Email admin :</strong> kieran.simonnet@linuxmail.org</p>
-
-</div>
-
-</section>
-
-<footer>
-© Réseau Pub France
-</footer>
-
-<script>
-
-/* CURSEUR */
-
-const cursor=document.querySelector(".cursor")
-
-document.addEventListener("mousemove",e=>{
-cursor.style.left=e.clientX+"px"
-cursor.style.top=e.clientY+"px"
-})
-
-/* MENU MOBILE */
-
-const menuBtn=document.querySelector(".menu-btn")
-const nav=document.querySelector("nav")
-
-menuBtn.onclick=()=>{
-nav.classList.toggle("active")
-}
-
-/* THREE JS */
-
-const scene=new THREE.Scene()
-
-const camera=new THREE.PerspectiveCamera(
-75,
-window.innerWidth/window.innerHeight,
-0.1,
-1000
-)
-
-const renderer=new THREE.WebGLRenderer({
-canvas:document.querySelector("#bg"),
-alpha:true
-})
-
-renderer.setSize(window.innerWidth,window.innerHeight)
-
-camera.position.z=60
-
-const particles=1200
-
-const geometry=new THREE.BufferGeometry()
-
-const positions=new Float32Array(particles*3)
-
-for(let i=0;i<particles*3;i++){
-positions[i]=(Math.random()-0.5)*400
-}
-
-geometry.setAttribute(
-"position",
-new THREE.BufferAttribute(positions,3)
-)
-
-const material=new THREE.PointsMaterial({
-color:0x25D366,
-size:1
-})
-
-const mesh=new THREE.Points(geometry,material)
-
-scene.add(mesh)
-
-/* ANIMATION */
-
-function animate(){
-
-requestAnimationFrame(animate)
-
-mesh.rotation.y+=0.0007
-mesh.rotation.x+=0.0003
-
-renderer.render(scene,camera)
-
-}
-
-animate()
-
-window.addEventListener("resize",()=>{
-
-camera.aspect=window.innerWidth/window.innerHeight
-camera.updateProjectionMatrix()
-
-renderer.setSize(window.innerWidth,window.innerHeight)
-
-})
-
-/* GSAP */
-
-gsap.registerPlugin(ScrollTrigger)
-
-gsap.from(".hero h1",{y:100,opacity:0,duration:1})
-gsap.from(".hero p",{y:60,opacity:0,duration:1,delay:.3})
-gsap.from(".join",{scale:.8,opacity:0,duration:1,delay:.6})
-
-gsap.from(".card",{
-scrollTrigger:".cards",
-y:80,
-opacity:0,
-stagger:.2,
-duration:1
-})
-
-</script>
-
+  <!-- Corners -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Lines -->
+  <div class="line-top"></div>
+  <div class="line-bottom"></div>
+
+  <!-- Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Content -->
+  <div class="stage">
+    <p class="eyebrow">DOSSIER INFOS PERSOS PEDOS - SITE TEMPORAIRE</p>
+
+    <h1 class="title">
+      DOSSIER INFOS PEDOS
+      <em>collection complète de fichiers contenant des informations personnelles de différents pédophiles</em>
+    </h1>
+
+    <div class="ornament">
+      <span></span>
+      <svg viewBox="0 0 16 16">
+        <polygon points="8,1 10,6 15,6 11,9.5 12.5,15 8,12 3.5,15 5,9.5 1,6 6,6"/>
+      </svg>
+      <span></span>
+    </div>
+
+    <div class="btn-wrap">
+      <a class="btn" href="https://mobidrive.com/sharelink/f/6IBhmmD3uzncvd6bC3YmrG4xt4jdKGuKeHX6VCdP9nVd" target="_blank" rel="noopener">
+        <div class="btn-inner">
+          <span>Accéder au dossier</span>
+        </div>
+        <div class="btn-arrow"></div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Generate floating gold particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.cssText = `
+        left: ${Math.random() * 100}%;
+        top: ${40 + Math.random() * 40}%;
+        --dur: ${4 + Math.random() * 6}s;
+        --delay: ${Math.random() * 8}s;
+        width: ${Math.random() > 0.7 ? 2 : 1}px;
+        height: ${Math.random() > 0.7 ? 2 : 1}px;
+      `;
+      container.appendChild(p);
+    }
+  </script>
 </body>
 </html>
