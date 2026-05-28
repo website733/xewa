@@ -3,609 +3,995 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🍁 Canada — Révise pour demain</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Canada Revision Trainer</title>
+
 <style>
-  :root {
-    --red: #D52B1E;
-    --red-light: #FF4136;
-    --cream: #FAF7F2;
-    --dark: #1A1209;
-    --mid: #3D2B1F;
-    --gold: #C8922A;
-    --green: #2E7D32;
-    --blue: #1565C0;
-    --white: #FFFFFF;
-  }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--dark);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+min-height:100vh;
+padding:20px;
+}
 
-  /* ─── HERO ─── */
-  header {
-    background: var(--dark);
-    color: var(--cream);
-    padding: 3rem 2rem 2.5rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(213,43,30,.35) 0%, transparent 70%);
-  }
-  header .maple {
-    font-size: 3.5rem;
-    display: block;
-    animation: spin 8s linear infinite;
-  }
-  @keyframes spin {
-    0%,100% { transform: rotate(-5deg) scale(1); }
-    50% { transform: rotate(5deg) scale(1.08); }
-  }
-  header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    font-weight: 900;
-    letter-spacing: -1px;
-    position: relative;
-  }
-  header h1 span { color: var(--red-light); }
-  header p.sub {
-    margin-top: .5rem;
-    opacity: .65;
-    font-size: .95rem;
-    position: relative;
-  }
+.container{
+max-width:1200px;
+margin:auto;
+}
 
-  /* ─── PROGRESS BAR ─── */
-  .progress-bar-wrap {
-    background: var(--dark);
-    padding: .75rem 2rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .progress-bar-bg {
-    flex: 1;
-    height: 8px;
-    background: rgba(255,255,255,.12);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--red), var(--gold));
-    border-radius: 99px;
-    width: 0%;
-    transition: width .5s ease;
-  }
-  .progress-label {
-    color: rgba(255,255,255,.55);
-    font-size: .8rem;
-    white-space: nowrap;
-  }
+h1{
+text-align:center;
+font-size:3rem;
+margin-bottom:10px;
+}
 
-  /* ─── NAV TABS ─── */
-  .nav-tabs {
-    display: flex;
-    gap: .5rem;
-    padding: 1.5rem 2rem .5rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    flex-wrap: wrap;
-  }
-  .tab-btn {
-    padding: .5rem 1.2rem;
-    border-radius: 99px;
-    border: 2px solid transparent;
-    background: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    font-size: .85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,.07);
-    white-space: nowrap;
-  }
-  .tab-btn:hover { border-color: var(--red); color: var(--red); }
-  .tab-btn.active { background: var(--red); color: var(--white); border-color: var(--red); }
+.subtitle{
+text-align:center;
+opacity:0.8;
+margin-bottom:30px;
+}
 
-  /* ─── SECTIONS ─── */
-  .section { display: none; padding: 1.5rem 1.5rem 3rem; max-width: 760px; margin: 0 auto; }
-  .section.active { display: block; animation: fadeUp .3s ease; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-  }
+.tabs{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+justify-content:center;
+margin-bottom:25px;
+}
 
-  /* ─── FLASHCARDS ─── */
-  .flashcard-scene {
-    perspective: 1000px;
-    width: 100%;
-    max-width: 500px;
-    height: 220px;
-    margin: 0 auto 1.5rem;
-    cursor: pointer;
-  }
-  .flashcard {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform .55s cubic-bezier(.4,0,.2,1);
-  }
-  .flashcard.flipped { transform: rotateY(180deg); }
-  .card-face {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    border-radius: 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,.12);
-  }
-  .card-front { background: var(--dark); color: var(--cream); }
-  .card-front .q-label { font-size: .75rem; letter-spacing: 2px; text-transform: uppercase; opacity: .5; margin-bottom: .75rem; }
-  .card-front .q-text { font-size: 1.15rem; font-weight: 500; }
-  .card-back { background: var(--red); color: var(--white); transform: rotateY(180deg); }
-  .card-back .a-label { font-size: .75rem; letter-spacing: 2px; text-transform: uppercase; opacity: .7; margin-bottom: .75rem; }
-  .card-back .a-text { font-size: 1.2rem; font-weight: 600; }
-  .card-hint { font-size: .78rem; opacity: .5; margin-top: 1rem; }
+.tab{
+background:#334155;
+border:none;
+padding:12px 18px;
+border-radius:12px;
+cursor:pointer;
+color:white;
+font-weight:bold;
+transition:0.3s;
+}
 
-  .flashcard-controls {
-    display: flex;
-    gap: .75rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
-  }
-  .fc-counter {
-    text-align: center;
-    font-size: .85rem;
-    color: var(--mid);
-    opacity: .7;
-    margin-bottom: 1rem;
-  }
+.tab:hover{
+background:#475569;
+}
 
-  /* ─── QCM ─── */
-  .qcm-question {
-    background: var(--white);
-    border-radius: 14px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06);
-  }
-  .qcm-question .q { font-weight: 600; font-size: 1.05rem; margin-bottom: 1rem; }
-  .qcm-options { display: flex; flex-direction: column; gap: .6rem; }
-  .opt-btn {
-    padding: .75rem 1.1rem;
-    border: 2px solid #e8e2d9;
-    border-radius: 10px;
-    background: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    font-size: .95rem;
-    text-align: left;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .opt-btn:hover:not(:disabled) { border-color: var(--red); background: #fff5f4; }
-  .opt-btn.correct { background: #e8f5e9; border-color: var(--green); color: var(--green); }
-  .opt-btn.wrong   { background: #ffebee; border-color: var(--red); color: var(--red); }
-  .opt-btn:disabled { cursor: default; }
-  .feedback { font-size: .85rem; margin-top: .6rem; font-weight: 500; min-height: 1.2em; }
-  .feedback.ok { color: var(--green); }
-  .feedback.ko { color: var(--red); }
+.tab.active{
+background:#2563eb;
+}
 
-  /* ─── VRAI/FAUX ─── */
-  .tf-card {
-    background: var(--white);
-    border-radius: 14px;
-    padding: 1.5rem;
-    margin-bottom: 1.2rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06);
-  }
-  .tf-card .stmt { font-size: 1rem; font-weight: 500; margin-bottom: 1rem; line-height: 1.6; }
-  .tf-row { display: flex; gap: .75rem; }
-  .tf-btn {
-    flex: 1;
-    padding: .65rem;
-    border-radius: 10px;
-    border: 2px solid #e8e2d9;
-    background: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    font-size: .95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .tf-btn:hover:not(:disabled) { border-color: var(--gold); }
-  .tf-btn.correct { background: #e8f5e9; border-color: var(--green); color: var(--green); }
-  .tf-btn.wrong   { background: #ffebee; border-color: var(--red); color: var(--red); }
-  .tf-btn:disabled { cursor: default; }
+.card{
+background:rgba(255,255,255,0.08);
+padding:25px;
+border-radius:20px;
+margin-bottom:20px;
+border:1px solid rgba(255,255,255,0.1);
+backdrop-filter:blur(8px);
+}
 
-  /* ─── TEXTE À TROUS ─── */
-  .fill-card {
-    background: var(--white);
-    border-radius: 14px;
-    padding: 1.5rem;
-    margin-bottom: 1.2rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    font-size: 1.05rem;
-    line-height: 2;
-  }
-  .fill-input {
-    border: none;
-    border-bottom: 2.5px solid var(--gold);
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--dark);
-    width: 130px;
-    text-align: center;
-    outline: none;
-    padding: 0 4px;
-    transition: border-color .2s;
-  }
-  .fill-input:focus { border-color: var(--red); }
-  .fill-input.ok { border-color: var(--green); color: var(--green); }
-  .fill-input.ko { border-color: var(--red); color: var(--red); }
+.hidden{
+display:none;
+}
 
-  /* ─── ASSOCIATION ─── */
-  .match-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-  .match-col { display: flex; flex-direction: column; gap: .6rem; }
-  .match-col h3 { font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; opacity: .5; margin-bottom: .2rem; }
-  .match-item {
-    padding: .75rem 1rem;
-    border-radius: 10px;
-    border: 2px solid #e8e2d9;
-    background: var(--white);
-    cursor: pointer;
-    font-size: .95rem;
-    transition: all .2s;
-    user-select: none;
-  }
-  .match-item:hover { border-color: var(--gold); }
-  .match-item.selected { border-color: var(--blue); background: #e3f0ff; }
-  .match-item.matched  { border-color: var(--green); background: #e8f5e9; color: var(--green); font-weight: 600; pointer-events: none; }
-  .match-item.wrong    { border-color: var(--red); background: #ffebee; }
+.fact{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:12px;
+margin-bottom:20px;
+line-height:1.7;
+border-left:5px solid #3b82f6;
+}
 
-  /* ─── MÉMO / RÉSUMÉ ─── */
-  .memo-card {
-    background: var(--dark);
-    color: var(--cream);
-    border-radius: 16px;
-    padding: 2rem;
-    margin-bottom: 1.2rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .memo-card::before {
-    content: attr(data-icon);
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 3rem;
-    opacity: .12;
-  }
-  .memo-card .tag {
-    display: inline-block;
-    background: var(--red);
-    color: white;
-    font-size: .7rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    border-radius: 99px;
-    padding: .2rem .7rem;
-    margin-bottom: .75rem;
-  }
-  .memo-card .fact { font-size: 1.05rem; line-height: 1.7; }
-  .memo-card .fact strong { color: var(--gold); }
+button{
+background:#2563eb;
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+}
 
-  /* ─── SCORE CARD ─── */
-  .score-box {
-    background: var(--white);
-    border-radius: 14px;
-    padding: 1.25rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    margin-bottom: 1rem;
-  }
-  .score-box .label { font-size: .85rem; opacity: .6; }
-  .score-box .value { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--red); }
+button:hover{
+background:#1d4ed8;
+}
 
-  /* ─── BUTTONS ─── */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: .4rem;
-    padding: .65rem 1.4rem;
-    border-radius: 99px;
-    border: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .btn-primary { background: var(--red); color: white; }
-  .btn-primary:hover { background: #b71c1c; transform: translateY(-1px); }
-  .btn-outline { background: transparent; border: 2px solid var(--dark); color: var(--dark); }
-  .btn-outline:hover { background: var(--dark); color: var(--cream); }
-  .btn-gold { background: var(--gold); color: white; }
-  .btn-gold:hover { opacity: .88; }
+.answer-btn{
+display:block;
+width:100%;
+margin-top:10px;
+text-align:left;
+background:#334155;
+}
 
-  .btn-row { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1rem; }
+.answer-btn.correct{
+background:#16a34a;
+}
 
-  /* ─── TIMER ─── */
-  .timer-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: .4rem;
-    background: var(--dark);
-    color: var(--cream);
-    border-radius: 99px;
-    padding: .3rem .9rem;
-    font-size: .85rem;
-    font-weight: 600;
-    margin-bottom: 1.2rem;
-  }
-  .timer-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red-light); animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+.answer-btn.wrong{
+background:#dc2626;
+}
 
-  /* ─── CONFETTI MSG ─── */
-  .bravo-msg {
-    display: none;
-    text-align: center;
-    padding: 2.5rem 1rem;
-    animation: fadeUp .4s ease;
-  }
-  .bravo-msg.show { display: block; }
-  .bravo-msg .big { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: var(--red); }
-  .bravo-msg .sub { opacity: .65; margin-top: .4rem; }
+.question{
+margin-bottom:25px;
+padding:15px;
+background:rgba(255,255,255,0.03);
+border-radius:12px;
+}
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 540px) {
-    .match-grid { grid-template-columns: 1fr; }
-    .match-col:last-child { border-top: 2px solid #e8e2d9; padding-top: .5rem; }
-  }
+.score{
+margin-top:20px;
+font-size:1.3rem;
+font-weight:bold;
+}
+
+.flashcard{
+perspective:1000px;
+cursor:pointer;
+}
+
+.flashcard-inner{
+transition:transform 0.6s;
+transform-style:preserve-3d;
+position:relative;
+min-height:250px;
+}
+
+.flashcard.flip .flashcard-inner{
+transform:rotateY(180deg);
+}
+
+.flash-front,
+.flash-back{
+position:absolute;
+width:100%;
+height:250px;
+backface-visibility:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+border-radius:20px;
+font-size:1.5rem;
+padding:20px;
+text-align:center;
+}
+
+.flash-front{
+background:#1e293b;
+}
+
+.flash-back{
+background:#2563eb;
+transform:rotateY(180deg);
+}
+
+input,
+textarea,
+select{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+margin-top:10px;
+font-size:16px;
+}
+
+textarea{
+height:180px;
+resize:none;
+}
+
+.progress{
+height:20px;
+background:#334155;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.progress-bar{
+height:100%;
+width:0%;
+background:#22c55e;
+transition:0.5s;
+}
+
+.timer{
+font-size:1.2rem;
+margin-bottom:15px;
+color:#facc15;
+}
+
+.memory-list{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.memory-item{
+background:#1e293b;
+padding:15px;
+border-radius:12px;
+}
+
+@media(max-width:700px){
+
+h1{
+font-size:2rem;
+}
+
+}
+
 </style>
 </head>
 <body>
 
-<header>
-  <span class="maple">🍁</span>
-  <h1>Le <span>Canada</span></h1>
-  <p class="sub">Révise tout ce qu'il faut savoir pour demain</p>
-</header>
+<div class="container">
 
-<!-- Progress -->
-<div class="progress-bar-wrap">
-  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
-  <span class="progress-label" id="progressLabel">0 / 0 réponses</span>
+<h1>🇨🇦 Canada Trainer</h1>
+<p class="subtitle">
+Révise efficacement avec plusieurs méthodes d’apprentissage
+</p>
+
+<div class="tabs">
+
+<button class="tab active" onclick="showTab('lesson',event)">
+Cours
+</button>
+
+<button class="tab" onclick="showTab('quiz',event)">
+QCM
+</button>
+
+<button class="tab" onclick="showTab('truefalse',event)">
+Vrai/Faux
+</button>
+
+<button class="tab" onclick="showTab('flashcards',event)">
+Flashcards
+</button>
+
+<button class="tab" onclick="showTab('matching',event)">
+Association
+</button>
+
+<button class="tab" onclick="showTab('speed',event)">
+Rapide
+</button>
+
+<button class="tab" onclick="showTab('typing',event)">
+Écriture
+</button>
+
+<button class="tab" onclick="showTab('memory',event)">
+Mémoire
+</button>
+
 </div>
 
-<!-- Navigation -->
-<div class="nav-tabs">
-  <button class="tab-btn active" onclick="showTab('memo')">📖 Leçon</button>
-  <button class="tab-btn" onclick="showTab('flash')">🃏 Flashcards</button>
-  <button class="tab-btn" onclick="showTab('qcm')">✅ QCM</button>
-  <button class="tab-btn" onclick="showTab('tf')">⚡ Vrai / Faux</button>
-  <button class="tab-btn" onclick="showTab('fill')">✏️ Texte à trous</button>
-  <button class="tab-btn" onclick="showTab('match')">🔗 Association</button>
-  <button class="tab-btn" onclick="showTab('score')">🏆 Score</button>
+<!-- ================= COURS ================= -->
+
+<div id="lesson" class="card section">
+
+<h2>📘 Leçon</h2>
+
+<div class="fact">
+Canada is in Northern America, and its capital is Ottawa.
 </div>
 
-<!-- ══════════════════ LEÇON ══════════════════ -->
-<div class="section active" id="sec-memo">
-  <h2 class="section-title">📖 Mémorise ces faits</h2>
-
-  <div class="memo-card" data-icon="🗺️">
-    <span class="tag">Géographie</span>
-    <p class="fact">Le Canada se trouve en <strong>Amérique du Nord</strong>. Sa capitale est <strong>Ottawa</strong>.</p>
-  </div>
-
-  <div class="memo-card" data-icon="🏛️">
-    <span class="tag">Organisation</span>
-    <p class="fact">Le Canada n'a pas d'États, mais des <strong>Territoires</strong> (ex : <strong>Yukon</strong>) et des <strong>Provinces</strong> (ex : <strong>Ontario</strong>).</p>
-  </div>
-
-  <div class="memo-card" data-icon="🧊">
-    <span class="tag">Histoire</span>
-    <p class="fact">Les <strong>Inuits</strong> furent les premiers habitants du Canada. Ils vivaient dans le <strong>nord</strong> (Nunavut).</p>
-  </div>
-
-  <div class="memo-card" data-icon="🌊">
-    <span class="tag">Océans</span>
-    <p class="fact">Le Canada est entouré de <strong>3 océans</strong> : l'<strong>Arctique</strong> (nord), le <strong>Pacifique</strong> (ouest), l'<strong>Atlantique</strong> (est).</p>
-  </div>
-
-  <div class="memo-card" data-icon="📏">
-    <span class="tag">Frontières & Taille</span>
-    <p class="fact">Frontière avec l'<strong>Alaska</strong> au nord-ouest et les <strong>États-Unis</strong> au sud. C'est le <strong>2ᵉ plus grand pays du monde</strong> après la Russie.</p>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="showTab('flash')">🃏 Commencer les flashcards →</button>
-  </div>
+<div class="fact">
+There are no States in Canada but Territories (Yukon)
+and Provinces (Ontario).
 </div>
 
-<!-- ══════════════════ FLASHCARDS ══════════════════ -->
-<div class="section" id="sec-flash">
-  <h2 class="section-title">🃏 Flashcards</h2>
-  <p style="opacity:.6;font-size:.9rem;margin-bottom:1.2rem;">Clique sur la carte pour voir la réponse</p>
-
-  <div class="fc-counter" id="fcCounter">Carte 1 / 7</div>
-
-  <div class="flashcard-scene" onclick="flipCard()">
-    <div class="flashcard" id="flashcard">
-      <div class="card-face card-front">
-        <span class="q-label">Question</span>
-        <span class="q-text" id="fcQuestion"></span>
-        <span class="card-hint">👆 Clique pour retourner</span>
-      </div>
-      <div class="card-face card-back">
-        <span class="a-label">Réponse</span>
-        <span class="a-text" id="fcAnswer"></span>
-      </div>
-    </div>
-  </div>
-
-  <div class="flashcard-controls">
-    <button class="btn btn-outline" onclick="prevCard()">← Précédent</button>
-    <button class="btn btn-primary" onclick="nextCard()">Suivant →</button>
-  </div>
-
-  <div class="btn-row" style="justify-content:center;">
-    <button class="btn btn-gold" onclick="showTab('qcm')">Passer au QCM →</button>
-  </div>
+<div class="fact">
+Inuits were the first inhabitants of Canada:
+they lived in the north (Nunavut).
 </div>
 
-<!-- ══════════════════ QCM ══════════════════ -->
-<div class="section" id="sec-qcm">
-  <h2 class="section-title">✅ Questions à choix multiples</h2>
-  <div id="qcmContainer"></div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="resetQCM()">🔄 Recommencer</button>
-    <button class="btn btn-gold" onclick="showTab('tf')">Vrai/Faux →</button>
-  </div>
+<div class="fact">
+Canada is surrounded by three oceans:
+<ul style="margin-top:10px;margin-left:20px;">
+<li>North → Arctic Ocean</li>
+<li>West → Pacific Ocean</li>
+<li>East → Atlantic Ocean</li>
+</ul>
 </div>
 
-<!-- ══════════════════ VRAI/FAUX ══════════════════ -->
-<div class="section" id="sec-tf">
-  <h2 class="section-title">⚡ Vrai ou Faux ?</h2>
-  <div id="tfContainer"></div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="resetTF()">🔄 Recommencer</button>
-    <button class="btn btn-gold" onclick="showTab('fill')">Texte à trous →</button>
-  </div>
+<div class="fact">
+It has a border with Alaska in the northwest,
+and with the USA in the south.
 </div>
 
-<!-- ══════════════════ TEXTE À TROUS ══════════════════ -->
-<div class="section" id="sec-fill">
-  <h2 class="section-title">✏️ Complète les phrases</h2>
-  <div id="fillContainer"></div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkFill()">✔️ Vérifier mes réponses</button>
-    <button class="btn btn-outline" onclick="resetFill()">🔄 Réinitialiser</button>
-  </div>
-  <div id="fillScore" style="margin-top:1rem;font-weight:600;font-size:1.1rem;color:var(--red);"></div>
+<div class="fact">
+Canada is the second largest country in the world after Russia.
 </div>
 
-<!-- ══════════════════ ASSOCIATION ══════════════════ -->
-<div class="section" id="sec-match">
-  <h2 class="section-title">🔗 Associe les éléments</h2>
-  <p style="opacity:.6;font-size:.9rem;margin-bottom:1.2rem;">Sélectionne un mot à gauche, puis sa correspondance à droite.</p>
-  <div class="match-grid">
-    <div class="match-col">
-      <h3>Concept</h3>
-      <div id="matchLeft"></div>
-    </div>
-    <div class="match-col">
-      <h3>Réponse</h3>
-      <div id="matchRight"></div>
-    </div>
-  </div>
-  <div id="matchFeedback" style="margin-top:1rem;font-weight:600;font-size:1.1rem;"></div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="initMatch()">🔄 Recommencer</button>
-  </div>
 </div>
 
-<!-- ══════════════════ SCORE ══════════════════ -->
-<div class="section" id="sec-score">
-  <h2 class="section-title">🏆 Ton Score Global</h2>
-  <div class="score-box">
-    <span class="label">QCM — Bonnes réponses</span>
-    <span class="value" id="scoreQCM">—</span>
-  </div>
-  <div class="score-box">
-    <span class="label">Vrai/Faux — Bonnes réponses</span>
-    <span class="value" id="scoreTF">—</span>
-  </div>
-  <div class="score-box">
-    <span class="label">Texte à trous — Bonnes réponses</span>
-    <span class="value" id="scoreFill">—</span>
-  </div>
-  <div class="bravo-msg" id="bravoMsg">
-    <div class="big">🎉 Bravo !</div>
-    <p class="sub">Tu es prêt(e) pour demain. Le Canada n'a plus de secrets pour toi !</p>
-  </div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="showTab('memo')">↩ Recommencer depuis le début</button>
-  </div>
+<!-- ================= QCM ================= -->
+
+<div id="quiz" class="card section hidden">
+
+<h2>🧠 QCM</h2>
+
+<div id="quiz-container"></div>
+
+<div class="score" id="quiz-score"></div>
+
+</div>
+
+<!-- ================= VRAI FAUX ================= -->
+
+<div id="truefalse" class="card section hidden">
+
+<h2>✅❌ Vrai ou Faux</h2>
+
+<div id="tf-container"></div>
+
+<div class="score" id="tf-score"></div>
+
+</div>
+
+<!-- ================= FLASHCARDS ================= -->
+
+<div id="flashcards" class="card section hidden">
+
+<h2>🃏 Flashcards</h2>
+
+<div class="flashcard" onclick="flipCard()">
+
+<div class="flashcard-inner">
+
+<div class="flash-front" id="flash-front">
+What is the capital of Canada?
+</div>
+
+<div class="flash-back" id="flash-back">
+Ottawa
+</div>
+
+</div>
+
+</div>
+
+<br>
+
+<button onclick="nextCard()">Carte suivante</button>
+
+</div>
+
+<!-- ================= ASSOCIATION ================= -->
+
+<div id="matching" class="card section hidden">
+
+<h2>🔗 Association</h2>
+
+<div id="matching-container"></div>
+
+<div class="score" id="matching-score"></div>
+
+</div>
+
+<!-- ================= RAPIDE ================= -->
+
+<div id="speed" class="card section hidden">
+
+<h2>⚡ Mode Rapide</h2>
+
+<div class="timer">
+Temps restant :
+<span id="speedTime">30</span>s
+</div>
+
+<h3 id="speedQuestion"></h3>
+
+<input type="text" id="speedInput" placeholder="Ta réponse...">
+
+<br><br>
+
+<button onclick="checkSpeed()">Valider</button>
+
+<div class="score" id="speedScore"></div>
+
+</div>
+
+<!-- ================= ECRITURE ================= -->
+
+<div id="typing" class="card section hidden">
+
+<h2>✍️ Écriture libre</h2>
+
+<p>
+Écris tout ce dont tu te souviens :
+</p>
+
+<textarea id="writingBox"></textarea>
+
+<br><br>
+
+<button onclick="analyzeWriting()">
+Analyser
+</button>
+
+<div class="score" id="writingResult"></div>
+
+</div>
+
+<!-- ================= MEMOIRE ================= -->
+
+<div id="memory" class="card section hidden">
+
+<h2>🧩 Méthodes de mémorisation</h2>
+
+<div class="memory-list">
+
+<div class="memory-item">
+<h3>🇨🇦 Ottawa</h3>
+<p>
+Imagine un énorme parlement avec un drapeau canadien.
+</p>
+</div>
+
+<div class="memory-item">
+<h3>🌊 3 océans</h3>
+<p>
+Nord = Arctic<br>
+Ouest = Pacific<br>
+Est = Atlantic
+</p>
+</div>
+
+<div class="memory-item">
+<h3>🧊 Inuits</h3>
+<p>
+Pense à la neige du Nunavut.
+</p>
+</div>
+
+<div class="memory-item">
+<h3>🌍 2e plus grand pays</h3>
+<p>
+Canada juste après la Russie.
+</p>
+</div>
+
+</div>
+
+<br>
+
+<h3>Progression</h3>
+
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+
+<br>
+
+<button onclick="increaseProgress()">
+J'ai révisé
+</button>
+
+</div>
+
 </div>
 
 <script>
-// ─── DATA ─────────────────────────────────────────────────────
-const FLASHCARDS = [
-  { q: "Où se trouve le Canada ?", a: "En Amérique du Nord" },
-  { q: "Quelle est la capitale du Canada ?", a: "Ottawa" },
-  { q: "Quels types de divisions administratives y a-t-il au Canada ?", a: "Des Territoires et des Provinces" },
-  { q: "Donne un exemple de Territoire canadien.", a: "Le Yukon" },
-  { q: "Donne un exemple de Province canadienne.", a: "L'Ontario" },
-  { q: "Qui étaient les premiers habitants du Canada ?", a: "Les Inuits, dans le Nord (Nunavut)" },
-  { q: "Par combien d'océans le Canada est-il entouré ? Lesquels ?", a: "3 océans : Arctique, Pacifique, Atlantique" },
-  { q: "Avec quels pays/territoires le Canada partage-t-il une frontière ?", a: "Alaska (nord-ouest) et États-Unis (sud)" },
-  { q: "Quel est le rang du Canada parmi les plus grands pays du monde ?", a: "2ᵉ plus grand pays, après la Russie" },
+
+/* ================= ONGLETS ================= */
+
+function showTab(id,event){
+
+document.querySelectorAll('.section').forEach(sec=>{
+sec.classList.add('hidden');
+});
+
+document.getElementById(id).classList.remove('hidden');
+
+document.querySelectorAll('.tab').forEach(tab=>{
+tab.classList.remove('active');
+});
+
+event.target.classList.add('active');
+
+}
+
+/* ================= QCM ================= */
+
+const quizData = [
+
+{
+q:"What is the capital of Canada?",
+a:["Toronto","Ottawa","Montreal","Quebec"],
+correct:1
+},
+
+{
+q:"How many oceans surround Canada?",
+a:["1","2","3","4"],
+correct:2
+},
+
+{
+q:"Who were the first inhabitants?",
+a:["Romans","Inuits","French","Americans"],
+correct:1
+},
+
+{
+q:"What is an example of a territory?",
+a:["Ontario","Yukon","Paris","Mexico"],
+correct:1
+}
+
 ];
 
-const QCM_DATA = [
-  {
-    q: "Quelle est la capitale du Canada ?",
-    opts: ["Toronto", "Ottawa", "Montréal", "Vancouver"],
-    correct: 1,
-  },
-  {
-    q: "Dans quelle région du monde se trouve le Canada ?",
-    opts: ["Amérique du Sud", "Europe", "Amérique du Nord", "Asie centrale"],
-    correct: 2,
-  },
-  {
-    q: "Qui étaient les premiers habitants du Canada ?",
-    opts: ["Les Iroquois", "Les Inuits", "Les Vikings", "Les Aztèques"],
-    correct: 1,
-  },
-  {
-    q: "Combien d'océans entourent le Canada ?",
-    opts: ["1", "2", "3", "4"],
-    correct: 2,
-  },
-  {
-    q: "Quel est l'océan qui borde le Canada à l'ouest ?",
-    opts: ["Arctique", "Atlantique", "Indien", "Pacifique"],
-    correct: 3,
-  },
-  {
-    q: "Le Canada est le ________ plus grand pays du monde.",
-    opts: ["1er", "2ème", "3ème", "5ème"],
- 
+let quizScore = 0;
+
+const quizContainer =
+document.getElementById("quiz-container");
+
+quizData.forEach((item,index)=>{
+
+const div = document.createElement("div");
+
+div.classList.add("question");
+
+div.innerHTML = `
+<h3>${index+1}. ${item.q}</h3>
+`;
+
+item.a.forEach((answer,i)=>{
+
+const btn = document.createElement("button");
+
+btn.classList.add("answer-btn");
+
+btn.innerText = answer;
+
+btn.onclick = ()=>{
+
+if(btn.classList.contains("done")) return;
+
+btn.classList.add("done");
+
+if(i === item.correct){
+
+btn.classList.add("correct");
+
+quizScore++;
+
+}else{
+
+btn.classList.add("wrong");
+
+}
+
+document.getElementById("quiz-score")
+.innerHTML =
+"Score : " + quizScore + " / " + quizData.length;
+
+};
+
+div.appendChild(btn);
+
+});
+
+quizContainer.appendChild(div);
+
+});
+
+/* ================= VRAI FAUX ================= */
+
+const tfData = [
+
+{
+q:"Ottawa is the capital of Canada.",
+a:true
+},
+
+{
+q:"Canada has states like the USA.",
+a:false
+},
+
+{
+q:"Canada is surrounded by 3 oceans.",
+a:true
+},
+
+{
+q:"Inuits lived mainly in the south.",
+a:false
+}
+
+];
+
+let tfScore = 0;
+
+const tfContainer =
+document.getElementById("tf-container");
+
+tfData.forEach((item,index)=>{
+
+const div = document.createElement("div");
+
+div.classList.add("question");
+
+div.innerHTML = `
+<h3>${index+1}. ${item.q}</h3>
+`;
+
+const trueBtn = document.createElement("button");
+trueBtn.innerText = "Vrai";
+
+const falseBtn = document.createElement("button");
+falseBtn.innerText = "Faux";
+
+trueBtn.style.marginRight = "10px";
+
+function answer(user){
+
+if(div.classList.contains("done")) return;
+
+div.classList.add("done");
+
+if(user === item.a){
+
+tfScore++;
+
+div.style.borderLeft =
+"5px solid #16a34a";
+
+}else{
+
+div.style.borderLeft =
+"5px solid #dc2626";
+
+}
+
+document.getElementById("tf-score")
+.innerHTML =
+"Score : " + tfScore + " / " + tfData.length;
+
+}
+
+trueBtn.onclick = ()=>answer(true);
+falseBtn.onclick = ()=>answer(false);
+
+div.appendChild(trueBtn);
+div.appendChild(falseBtn);
+
+tfContainer.appendChild(div);
+
+});
+
+/* ================= FLASHCARDS ================= */
+
+const flashcards = [
+
+{
+q:"Capital of Canada?",
+a:"Ottawa"
+},
+
+{
+q:"How many oceans surround Canada?",
+a:"3 oceans"
+},
+
+{
+q:"First inhabitants?",
+a:"Inuits"
+},
+
+{
+q:"Largest country after Russia?",
+a:"Canada"
+}
+
+];
+
+let flashIndex = 0;
+let flipped = false;
+
+function flipCard(){
+
+const card =
+document.querySelector(".flashcard");
+
+flipped = !flipped;
+
+if(flipped){
+
+card.classList.add("flip");
+
+}else{
+
+card.classList.remove("flip");
+
+}
+
+}
+
+function nextCard(){
+
+flashIndex++;
+
+if(flashIndex >= flashcards.length){
+
+flashIndex = 0;
+
+}
+
+document.getElementById("flash-front")
+.innerText = flashcards[flashIndex].q;
+
+document.getElementById("flash-back")
+.innerText = flashcards[flashIndex].a;
+
+document.querySelector(".flashcard")
+.classList.remove("flip");
+
+flipped = false;
+
+}
+
+/* ================= ASSOCIATION ================= */
+
+const matchingData = [
+
+{
+left:"Capital",
+right:"Ottawa"
+},
+
+{
+left:"Northern Ocean",
+right:"Arctic Ocean"
+},
+
+{
+left:"Territory",
+right:"Yukon"
+},
+
+{
+left:"First inhabitants",
+right:"Inuits"
+}
+
+];
+
+const matchingContainer =
+document.getElementById("matching-container");
+
+matchingData.forEach((item,index)=>{
+
+const div = document.createElement("div");
+
+div.classList.add("question");
+
+div.innerHTML = `
+<p><b>${item.left}</b></p>
+
+<select id="match${index}">
+<option value="">Choisir</option>
+<option>Ottawa</option>
+<option>Arctic Ocean</option>
+<option>Yukon</option>
+<option>Inuits</option>
+</select>
+`;
+
+matchingContainer.appendChild(div);
+
+});
+
+const matchBtn = document.createElement("button");
+
+matchBtn.innerText = "Vérifier";
+
+matchBtn.onclick = ()=>{
+
+let good = 0;
+
+matchingData.forEach((item,index)=>{
+
+const value =
+document.getElementById("match"+index).value;
+
+if(value === item.right){
+
+good++;
+
+}
+
+});
+
+document.getElementById("matching-score")
+.innerHTML =
+"Résultat : " + good + " / " + matchingData.length;
+
+};
+
+matchingContainer.appendChild(matchBtn);
+
+/* ================= RAPIDE ================= */
+
+const speedQuestions = [
+
+{
+q:"Capital of Canada",
+a:"ottawa"
+},
+
+{
+q:"Northern Ocean",
+a:"arctic ocean"
+},
+
+{
+q:"First inhabitants",
+a:"inuits"
+},
+
+{
+q:"Example of territory",
+a:"yukon"
+}
+
+];
+
+let speedIndex = 0;
+let speedPoints = 0;
+
+function loadSpeed(){
+
+if(speedIndex >= speedQuestions.length){
+
+document.getElementById("speedQuestion")
+.innerHTML = "Fin du jeu";
+
+document.getElementById("speedScore")
+.innerHTML =
+"Score : " + speedPoints;
+
+return;
+
+}
+
+document.getElementById("speedQuestion")
+.innerHTML =
+speedQuestions[speedIndex].q;
+
+document.getElementById("speedInput").value = "";
+
+}
+
+loadSpeed();
+
+function checkSpeed(){
+
+const value =
+document.getElementById("speedInput")
+.value.toLowerCase().trim();
+
+if(value === speedQuestions[speedIndex].a){
+
+speedPoints++;
+
+}
+
+speedIndex++;
+
+loadSpeed();
+
+}
+
+let speedTime = 30;
+
+setInterval(()=>{
+
+if(speedTime > 0){
+
+speedTime--;
+
+document.getElementById("speedTime")
+.innerText = speedTime;
+
+}else{
+
+document.getElementById("speedQuestion")
+.innerHTML =
+"⏰ Temps écoulé";
+
+}
+
+},1000);
+
+/* ================= ECRITURE ================= */
+
+function analyzeWriting(){
+
+const text =
+document.getElementById("writingBox")
+.value.toLowerCase();
+
+const keywords = [
+
+"ottawa",
+"inuits",
+"arctic",
+"pacific",
+"atlantic",
+"yukon",
+"canada",
+"russia"
+
+];
+
+let points = 0;
+
+keywords.forEach(word=>{
+
+if(text.includes(word)){
+
+points++;
+
+}
+
+});
+
+let result = "";
+
+if(points <= 2){
+
+result = "❌ Révise encore.";
+
+}else if(points <= 5){
+
+result = "⚠️ Niveau moyen.";
+
+}else{
+
+result = "✅ Très bon niveau.";
+
+}
+
+document.getElementById("writingResult")
+.innerHTML =
+result + "<br><br>Mots-clés : "
++ points + " / " + keywords.length;
+
+}
+
+/* ================= PROGRESSION ================= */
+
+let progress = 0;
+
+function increaseProgress(){
+
+progress += 20;
+
+if(progress > 100){
+
+progress = 100;
+
+}
+
+document.getElementById("progressBar")
+.style.width = progress + "%";
+
+}
+
+</script>
+
+</body>
+</html>
