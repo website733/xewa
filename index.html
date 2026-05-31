@@ -1,842 +1,573 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>FastTap - Apprendre à taper vite</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>PSG Champion d'Europe — OM dépité</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --accent: #f97316;
-      --bg: #0f172a;
-      --bg-soft: #111827;
-      --text: #e5e7eb;
-      --danger: #ef4444;
-      --success: #22c55e;
-      --card: #020617;
-      --border: #1f2937;
-      --child: #a855f7;
-      --teacher: #22c55e;
-      --ergo: #facc15;
-      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    /* =========================
+       RESET & VARIABLES
+    ========================== */
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --psg-blue:#001b5e;
+      --psg-red:#e30613;
+      --om-blue:#00a3e0;
+      --gold:#f5c542;
+      --dark:#050814;
+      --light:#f5f5f5;
+      --card-bg:rgba(255,255,255,0.06);
+      --blur:blur(14px);
+      --radius:22px;
+      --speed:0.5s;
+    }
+    body{
+      font-family:"Segoe UI",system-ui,sans-serif;
+      background:#02030a;
+      color:#fff;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+
+    /* =========================
+       BACKGROUND GLOBAL
+    ========================== */
+    .bg-stars{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 10% 20%,rgba(255,255,255,0.18) 0,transparent 55%),
+        radial-gradient(circle at 80% 0,rgba(0,163,224,0.25) 0,transparent 55%),
+        radial-gradient(circle at 50% 100%,rgba(227,6,19,0.25) 0,transparent 55%);
+      opacity:0.35;
+      mix-blend-mode:screen;
+      z-index:-2;
+      animation:starsFloat 18s ease-in-out infinite alternate;
+    }
+    @keyframes starsFloat{
+      0%{transform:translate3d(0,0,0)}
+      50%{transform:translate3d(-20px,-30px,0)}
+      100%{transform:translate3d(10px,10px,0)}
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    .particles{
+      position:fixed;
+      inset:-50px;
+      pointer-events:none;
+      background-image:
+        radial-gradient(circle,rgba(255,255,255,0.7) 0,transparent 55%),
+        radial-gradient(circle,rgba(245,197,66,0.7) 0,transparent 55%);
+      background-size:3px 3px,2px 2px;
+      background-position:10% 20%,80% 10%;
+      mix-blend-mode:screen;
+      opacity:0.35;
+      animation:particlesMove 6s linear infinite;
+      z-index:-1;
+    }
+    @keyframes particlesMove{
+      0%{transform:translate3d(0,0,0)}
+      50%{transform:translate3d(-10px,-20px,0)}
+      100%{transform:translate3d(0,0,0)}
     }
 
-    body {
-      font-family: var(--font-main);
-      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    /* =========================
+       HERO CINÉMATIQUE
+    ========================== */
+    header.hero{
+      min-height:70vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      padding:3rem 1.5rem 2rem;
+      overflow:hidden;
+    }
+    .hero-inner{
+      max-width:1100px;
+      width:100%;
+      display:grid;
+      grid-template-columns:minmax(0,3fr) minmax(0,2fr);
+      gap:2.5rem;
+      align-items:center;
+    }
+    .hero-left h1{
+      font-size:2.6rem;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      line-height:1.2;
+    }
+    .hero-left h1 span{
+      color:var(--gold);
+    }
+    .hero-sub{
+      margin-top:0.8rem;
+      font-size:0.95rem;
+      opacity:0.85;
+      text-transform:uppercase;
+      letter-spacing:0.18em;
     }
 
-    header {
-      border-bottom: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.9);
-      backdrop-filter: blur(16px);
-      position: sticky;
-      top: 0;
-      z-index: 20;
+    .psg-logo{
+      width:110px;height:110px;
+      border-radius:50%;
+      background:conic-gradient(from 210deg,var(--psg-red),var(--psg-blue),#ffffff,var(--psg-red));
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 0 40px rgba(0,0,0,0.7);
+      margin-bottom:1.5rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .psg-logo-inner{
+      width:86px;height:86px;border-radius:50%;
+      background:radial-gradient(circle at 30% 20%,#ffffff 0,#dcdcdc 25%,#001b5e 70%);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--psg-red);
+      font-weight:800;
+      font-size:0.9rem;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
     }
 
-    .nav {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0.75rem 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+    .hero-right{
+      position:relative;
+      height:260px;
+      perspective:900px;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+    /* Terrain 3D */
+    .pitch-wrapper{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform-style:preserve-3d;
+      animation:pitchFloat 10s ease-in-out infinite alternate;
+    }
+    @keyframes pitchFloat{
+      0%{transform:rotateX(58deg) rotateZ(-18deg) translateY(10px)}
+      100%{transform:rotateX(62deg) rotateZ(-22deg) translateY(-10px)}
+    }
+    .pitch{
+      width:320px;height:200px;
+      background:radial-gradient(circle at 50% 0,#1fdf73 0,#0b5b2a 55%,#02140a 100%);
+      border-radius:18px;
+      position:relative;
+      box-shadow:0 40px 70px rgba(0,0,0,0.9);
+      overflow:hidden;
+    }
+    .pitch::before{
+      content:"";
+      position:absolute;
+      inset:10px;
+      border-radius:14px;
+      border:2px solid rgba(255,255,255,0.7);
+    }
+    .pitch-line{
+      position:absolute;
+      left:50%;top:10px;bottom:10px;
+      width:2px;
+      background:rgba(255,255,255,0.7);
+      transform:translateX(-50%);
+    }
+    .pitch-circle{
+      position:absolute;
+      width:70px;height:70px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,0.7);
+      left:50%;top:50%;
+      transform:translate(-50%,-50%);
     }
 
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: conic-gradient(from 180deg, #f97316, #22c55e, #2563eb, #a855f7, #f97316);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #020617;
-      font-size: 0.9rem;
-      font-weight: 900;
-      box-shadow: 0 0 18px rgba(59, 130, 246, 0.7);
+    /* Silhouettes joueurs 3D */
+    .player-silhouette{
+      position:absolute;
+      width:34px;height:80px;
+      border-radius:18px;
+      background:linear-gradient(to top,rgba(0,0,0,0.9),rgba(255,255,255,0.2));
+      box-shadow:0 0 18px rgba(0,0,0,0.8);
+      transform-style:preserve-3d;
+    }
+    .player-silhouette::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:linear-gradient(to top,rgba(227,6,19,0.9),rgba(0,27,94,0.9));
+      mix-blend-mode:screen;
+      opacity:0.7;
+    }
+    .player1{left:22%;top:26%;animation:playerPulse 3.5s ease-in-out infinite;}
+    .player2{left:52%;top:40%;animation:playerPulse 4.2s ease-in-out infinite 0.4s;}
+    .player3{left:72%;top:60%;animation:playerPulse 3.8s ease-in-out infinite 0.8s;}
+    @keyframes playerPulse{
+      0%,100%{transform:translateY(0) scale(1)}
+      50%{transform:translateY(-6px) scale(1.05)}
     }
 
-    .nav-links {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+    .trophy-glow{
+      position:absolute;
+      inset:auto 18% -40px 18%;
+      height:70px;
+      background:radial-gradient(circle at 50% 0,rgba(245,197,66,0.9) 0,transparent 70%);
+      opacity:0.7;
+      filter:blur(8px);
     }
 
-    .nav-links button {
-      border-radius: 999px;
-      border: 1px solid transparent;
-      padding: 0.4rem 0.9rem;
-      font-size: 0.85rem;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      transition: all 0.18s ease-out;
-      opacity: 0.8;
+    /* =========================
+       BANDEAU TAQUIN
+    ========================== */
+    .banter-banner{
+      margin-top:1.8rem;
+      padding:1rem 1.4rem;
+      border-radius:999px;
+      background:linear-gradient(90deg,rgba(0,0,0,0.7),rgba(0,0,0,0.3));
+      border:1px solid rgba(255,255,255,0.12);
+      display:flex;
+      align-items:center;
+      gap:0.8rem;
+      font-size:0.95rem;
+      max-width:650px;
+    }
+    .banter-tag{
+      padding:0.25rem 0.7rem;
+      border-radius:999px;
+      background:rgba(245,197,66,0.12);
+      border:1px solid rgba(245,197,66,0.6);
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:0.16em;
+    }
+    .banter-text span{
+      color:var(--gold);
+      font-weight:600;
     }
 
-    .nav-links button span.badge {
-      font-size: 0.7rem;
-      padding: 0.1rem 0.45rem;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.4);
+    /* =========================
+       SPLIT PSG / OM
+    ========================== */
+    .split{
+      display:grid;
+      grid-template-columns:minmax(0,3fr) minmax(0,2fr);
+      min-height:60vh;
+      position:relative;
+    }
+    .side{
+      padding:3rem 2.5rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .side::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      mix-blend-mode:screen;
+      opacity:0.25;
+      background-image:
+        radial-gradient(circle at 10% 20%,rgba(255,255,255,0.15) 0,transparent 55%),
+        radial-gradient(circle at 80% 0,rgba(255,255,255,0.1) 0,transparent 55%);
+    }
+    .side-psg{
+      background:radial-gradient(circle at top left,#1b2a7a 0,#02030a 55%,#000 100%);
+      border-right:1px solid rgba(255,255,255,0.08);
+    }
+    .side-om{
+      background:radial-gradient(circle at top right,#0b1a3a 0,#02030a 55%,#000 100%);
     }
 
-    .nav-links button[data-role="eleve"] {
-      border-color: rgba(37, 99, 235, 0.5);
+    /* =========================
+       CARTES JOUEURS 3D
+    ========================== */
+    .players-section{
+      margin-top:1.5rem;
+    }
+    .players-title{
+      font-size:0.95rem;
+      text-transform:uppercase;
+      letter-spacing:0.18em;
+      opacity:0.85;
+      margin-bottom:1rem;
+    }
+    .players-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:1rem;
+    }
+    .player-card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      padding:1rem;
+      backdrop-filter:var(--blur);
+      border:1px solid rgba(255,255,255,0.1);
+      transform-style:preserve-3d;
+      transition:transform var(--speed),box-shadow var(--speed),border-color var(--speed);
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+    }
+    .player-card::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:conic-gradient(from 210deg,rgba(227,6,19,0.4),rgba(0,27,94,0.4),transparent,rgba(245,197,66,0.4));
+      mix-blend-mode:screen;
+      opacity:0;
+      transition:opacity var(--speed);
+    }
+    .player-card:hover{
+      transform:rotateY(12deg) rotateX(6deg) scale(1.05);
+      box-shadow:0 20px 40px rgba(0,0,0,0.7);
+      border-color:rgba(245,197,66,0.7);
+    }
+    .player-card:hover::before{
+      opacity:0.9;
+    }
+    .player-avatar{
+      width:100%;
+      height:120px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#111,#333);
+      margin-bottom:0.6rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .player-avatar::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg,rgba(255,255,255,0.25),transparent);
+      mix-blend-mode:overlay;
+      transform:translateX(-100%);
+      animation:shine 4s infinite;
+    }
+    @keyframes shine{
+      0%{transform:translateX(-100%)}
+      60%{transform:translateX(120%)}
+      100%{transform:translateX(120%)}
+    }
+    .player-silhouette-card{
+      position:absolute;
+      width:40px;height:90px;
+      border-radius:18px;
+      background:linear-gradient(to top,rgba(0,0,0,0.9),rgba(255,255,255,0.2));
+      left:50%;top:50%;
+      transform:translate(-50%,-50%);
+    }
+    .player-silhouette-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:linear-gradient(to top,rgba(227,6,19,0.9),rgba(0,27,94,0.9));
+      mix-blend-mode:screen;
+      opacity:0.8;
+    }
+    .player-meta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:0.8rem;
+      opacity:0.85;
+      margin-bottom:0.2rem;
+    }
+    .player-name{
+      font-weight:700;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      font-size:0.85rem;
+    }
+    .player-role{
+      font-size:0.75rem;
+      opacity:0.8;
     }
 
-    .nav-links button[data-role="enfant"] {
-      border-color: rgba(168, 85, 247, 0.5);
+    /* =========================
+       CÔTÉ OM
+    ========================== */
+    .om-header{
+      font-size:2rem;
+      opacity:0.8;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+    }
+    .om-sub{
+      margin-top:0.8rem;
+      font-size:0.95rem;
+      opacity:0.7;
+    }
+    .om-score{
+      margin-top:2rem;
+      font-size:1.6rem;
+      opacity:0.85;
+    }
+    .om-score span{
+      color:var(--om-blue);
+    }
+    .om-mood{
+      margin-top:1.5rem;
+      font-size:0.95rem;
+      opacity:0.6;
     }
 
-    .nav-links button[data-role="enseignant"] {
-      border-color: rgba(34, 197, 94, 0.5);
+    /* =========================
+       FOOTER
+    ========================== */
+    footer{
+      padding:1.5rem;
+      text-align:center;
+      font-size:0.8rem;
+      opacity:0.6;
     }
 
-    .nav-links button[data-role="ergo"] {
-      border-color: rgba(250, 204, 21, 0.5);
-    }
-
-    .nav-links button.active {
-      background: linear-gradient(135deg, #2563eb, #f97316);
-      border-color: transparent;
-      color: #0b1120;
-      opacity: 1;
-      box-shadow: 0 0 18px rgba(59, 130, 246, 0.7);
-    }
-
-    main {
-      flex: 1;
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 1.5rem 1.25rem 2.5rem;
-      display: grid;
-      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.2fr);
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 900px) {
-      main {
-        grid-template-columns: minmax(0, 1fr);
+    /* =========================
+       RESPONSIVE
+    ========================== */
+    @media(max-width:900px){
+      .hero-inner{
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+      .hero-right{
+        order:-1;
+        margin-bottom:1.5rem;
+      }
+      .banter-banner{
+        margin-inline:auto;
+      }
+      .split{
+        grid-template-columns:1fr;
+      }
+      .players-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
       }
     }
-
-    .card {
-      background: radial-gradient(circle at top left, #111827 0, #020617 60%);
-      border-radius: 1.25rem;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      padding: 1.25rem 1.4rem;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top, rgba(59, 130, 246, 0.15), transparent 55%);
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .pill {
-      font-size: 0.7rem;
-      padding: 0.1rem 0.5rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      opacity: 0.85;
-    }
-
-    .card-subtitle {
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
-
-    .tagline {
-      font-size: 0.9rem;
-      color: #9ca3af;
-      margin-bottom: 0.75rem;
-    }
-
-    .metrics {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .metric {
-      padding: 0.5rem 0.7rem;
-      border-radius: 0.9rem;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      font-size: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-      min-width: 90px;
-    }
-
-    .metric-label {
-      color: #9ca3af;
-      font-size: 0.7rem;
-    }
-
-    .metric-value {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .metric-trend {
-      font-size: 0.7rem;
-    }
-
-    .metric-trend.positive {
-      color: var(--success);
-    }
-
-    .metric-trend.negative {
-      color: var(--danger);
-    }
-
-    .lesson-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .lesson-chip {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 0.25rem 0.7rem;
-      font-size: 0.75rem;
-      cursor: pointer;
-      background: rgba(15, 23, 42, 0.8);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: all 0.15s ease-out;
-    }
-
-    .lesson-chip span.level {
-      font-size: 0.7rem;
-      opacity: 0.8;
-    }
-
-    .lesson-chip.active {
-      background: linear-gradient(135deg, #2563eb, #f97316);
-      border-color: transparent;
-      color: #020617;
-      box-shadow: 0 0 16px rgba(59, 130, 246, 0.7);
-    }
-
-    .lesson-chip.child {
-      border-color: rgba(168, 85, 247, 0.7);
-    }
-
-    .lesson-chip.teacher {
-      border-color: rgba(34, 197, 94, 0.7);
-    }
-
-    .lesson-chip.ergo {
-      border-color: rgba(250, 204, 21, 0.7);
-    }
-
-    .typing-area {
-      margin-top: 0.5rem;
-      border-radius: 1rem;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at top left, #111827 0, #020617 60%);
-      padding: 0.9rem 0.9rem 0.8rem;
-      position: relative;
-    }
-
-    .typing-target {
-      min-height: 60px;
-      font-size: 1rem;
-      line-height: 1.6;
-      margin-bottom: 0.6rem;
-      word-wrap: break-word;
-    }
-
-    .typing-target span {
-      padding: 0 1px;
-      border-radius: 3px;
-    }
-
-    .typing-target span.done {
-      color: #6ee7b7;
-    }
-
-    .typing-target span.current {
-      background: rgba(59, 130, 246, 0.25);
-      border-bottom: 2px solid #60a5fa;
-    }
-
-    .typing-target span.error {
-      background: rgba(248, 113, 113, 0.25);
-      color: #fecaca;
-    }
-
-    .typing-input-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .typing-input {
-      flex: 1;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: rgba(15, 23, 42, 0.9);
-      padding: 0.5rem 0.9rem;
-      color: var(--text);
-      font-size: 0.95rem;
-      outline: none;
-    }
-
-    .typing-input:focus {
-      border-color: #60a5fa;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5);
-    }
-
-    .typing-cta {
-      border-radius: 999px;
-      border: none;
-      padding: 0.45rem 0.9rem;
-      font-size: 0.85rem;
-      cursor: pointer;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #022c22;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      box-shadow: 0 0 16px rgba(34, 197, 94, 0.7);
-    }
-
-    .typing-cta.secondary {
-      background: transparent;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      color: #e5e7eb;
-      box-shadow: none;
-    }
-
-    .typing-footer {
-      margin-top: 0.6rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.75rem;
-      color: #9ca3af;
-      flex-wrap: wrap;
-    }
-
-    .typing-footer .hint {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .typing-footer .hint span.key {
-      border-radius: 4px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      padding: 0.05rem 0.3rem;
-      font-size: 0.7rem;
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .keyboard {
-      margin-top: 0.8rem;
-      border-radius: 0.9rem;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      padding: 0.5rem;
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617);
-      display: grid;
-      gap: 0.25rem;
-      font-size: 0.7rem;
-    }
-
-    .keyboard-row {
-      display: flex;
-      justify-content: center;
-      gap: 0.25rem;
-    }
-
-    .key {
-      min-width: 22px;
-      padding: 0.25rem 0.3rem;
-      border-radius: 0.4rem;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      text-align: center;
-      background: rgba(15, 23, 42, 0.95);
-      color: #e5e7eb;
-      box-shadow: 0 2px 0 rgba(15, 23, 42, 0.9);
-    }
-
-    .key.highlight {
-      background: linear-gradient(135deg, #2563eb, #f97316);
-      color: #020617;
-      border-color: transparent;
-      box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
-    }
-
-    .key.home {
-      border-color: rgba(248, 250, 252, 0.7);
-    }
-
-    .key.wide {
-      min-width: 40px;
-    }
-
-    .key.space {
-      min-width: 120px;
-    }
-
-    .side-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 0.4rem;
-      margin-bottom: 0.6rem;
-      flex-wrap: wrap;
-    }
-
-    .tab {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 0.25rem 0.7rem;
-      font-size: 0.75rem;
-      cursor: pointer;
-      background: rgba(15, 23, 42, 0.8);
-      opacity: 0.8;
-    }
-
-    .tab.active {
-      background: linear-gradient(135deg, #2563eb, #f97316);
-      border-color: transparent;
-      color: #020617;
-      opacity: 1;
-      box-shadow: 0 0 14px rgba(59, 130, 246, 0.7);
-    }
-
-    .progress-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      max-height: 260px;
-      overflow: auto;
-      padding-right: 0.25rem;
-    }
-
-    .progress-item {
-      border-radius: 0.8rem;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      padding: 0.45rem 0.6rem;
-      font-size: 0.8rem;
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 0.4rem;
-      align-items: center;
-    }
-
-    .progress-main {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-    }
-
-    .progress-title {
-      font-weight: 500;
-      font-size: 0.8rem;
-    }
-
-    .progress-meta {
-      font-size: 0.7rem;
-      color: #9ca3af;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 5px;
-      border-radius: 999px;
-      background: rgba(31, 41, 55, 0.9);
-      overflow: hidden;
-    }
-
-    .progress-bar-inner {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #22c55e, #f97316);
-      width: 0%;
-    }
-
-    .progress-stats {
-      text-align: right;
-      font-size: 0.7rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-    }
-
-    .badge-soft {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 0.1rem 0.45rem;
-      font-size: 0.7rem;
-    }
-
-    .role-label {
-      font-size: 0.7rem;
-      padding: 0.1rem 0.45rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      opacity: 0.9;
-    }
-
-    .role-eleve {
-      border-color: rgba(37, 99, 235, 0.7);
-      color: #93c5fd;
-    }
-
-    .role-enfant {
-      border-color: rgba(168, 85, 247, 0.7);
-      color: #e9d5ff;
-    }
-
-    .role-enseignant {
-      border-color: rgba(34, 197, 94, 0.7);
-      color: #bbf7d0;
-    }
-
-    .role-ergo {
-      border-color: rgba(250, 204, 21, 0.7);
-      color: #fef9c3;
-    }
-
-    .role-context {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
-
-    .role-context strong {
-      color: #e5e7eb;
-    }
-
-    .role-context small {
-      font-size: 0.7rem;
-      opacity: 0.9;
-    }
-
-    .role-tips {
-      font-size: 0.75rem;
-      color: #9ca3af;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .role-tips li {
-      margin-left: 1rem;
-    }
-
-    .pill-small {
-      font-size: 0.65rem;
-      padding: 0.05rem 0.4rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .section-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-    }
-
-    .section-subtitle {
-      font-size: 0.75rem;
-      color: #9ca3af;
-      margin-bottom: 0.4rem;
-    }
-
-    .grid-two {
-      display: grid;
-      grid-template-columns: 1.1fr 1.1fr;
-      gap: 0.5rem;
-    }
-
-    @media (max-width: 600px) {
-      .grid-two {
-        grid-template-columns: 1fr;
+    @media(max-width:600px){
+      .players-grid{
+        grid-template-columns:1fr;
       }
-    }
-
-    .small-input {
-      width: 100%;
-      border-radius: 0.6rem;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: rgba(15, 23, 42, 0.9);
-      padding: 0.35rem 0.6rem;
-      color: var(--text);
-      font-size: 0.75rem;
-      outline: none;
-    }
-
-    .small-input:focus {
-      border-color: #60a5fa;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5);
-    }
-
-    .small-label {
-      font-size: 0.7rem;
-      color: #9ca3af;
-      margin-bottom: 0.15rem;
-    }
-
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-top: 0.2rem;
-    }
-
-    .chip {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 0.1rem 0.45rem;
-      font-size: 0.7rem;
-      cursor: pointer;
-      background: rgba(15, 23, 42, 0.9);
-      opacity: 0.85;
-    }
-
-    .chip.active {
-      background: linear-gradient(135deg, #2563eb, #f97316);
-      border-color: transparent;
-      color: #020617;
-      opacity: 1;
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 0.75rem 1.25rem 1.2rem;
-      font-size: 0.75rem;
-      color: #6b7280;
-      text-align: center;
-    }
-
-    footer span {
-      color: #e5e7eb;
+      .side{
+        padding:2.2rem 1.5rem;
+      }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="nav">
-      <div class="logo">
-        <div class="logo-icon">FT</div>
-        <div>
-          <div>FastTap</div>
-          <div style="font-size:0.7rem;color:#9ca3af;">Écrire vite. Écrire bien. Ensemble.</div>
+
+  <div class="bg-stars"></div>
+  <div class="particles"></div>
+
+  <!-- =========================
+       HERO CINÉMATIQUE
+  ========================== -->
+  <header class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-left">
+        <div class="psg-logo">
+          <div class="psg-logo-inner">Paris</div>
+        </div>
+        <h1>Champion d'Europe <span>2026</span></h1>
+        <div class="hero-sub">Nuit de légende au Parc des Princes</div>
+
+        <div class="banter-banner">
+          <div class="banter-tag">Message aux Marseillais</div>
+          <div class="banter-text">
+            « vous, vous vous prenez 2‑0, nous, on a la deuxième étoile sur le maillot »
+          </div>
         </div>
       </div>
-      <div class="nav-links">
-        <button data-role="eleve" class="active">
-          Élève
-          <span class="badge">Collège / Lycée</span>
-        </button>
-        <button data-role="enfant">
-          Enfant
-          <span class="badge">6–11 ans</span>
-        </button>
-        <button data-role="enseignant">
-          Enseignant
-          <span class="badge">Classe & groupes</span>
-        </button>
-        <button data-role="ergo">
-          Ergothérapeute
-          <span class="badge">Adaptations</span>
-        </button>
+
+      <div class="hero-right">
+        <div class="pitch-wrapper">
+          <div class="pitch">
+            <div class="pitch-line"></div>
+            <div class="pitch-circle"></div>
+
+            <!-- Silhouettes joueurs -->
+            <div class="player-silhouette player1"></div>
+            <div class="player-silhouette player2"></div>
+            <div class="player-silhouette player3"></div>
+
+            <div class="trophy-glow"></div>
+          </div>
+        </div>
       </div>
+
     </div>
   </header>
 
-  <main>
-    <!-- Zone principale : exercice -->
-    <section class="card" id="main-card">
-      <div class="card-header">
-        <div>
-          <div class="card-title">
-            <span id="lesson-title">Leçon 1 — Rangée de base</span>
-            <span class="pill" id="lesson-difficulty">Niveau A1</span>
+  <!-- =========================
+       SPLIT PSG / OM
+  ========================== -->
+  <main class="split">
+
+    <!-- CÔTÉ PSG -->
+    <section class="side side-psg">
+      <h2 class="players-title">Joueurs phares (version stylisée)</h2>
+      <div class="players-grid">
+
+        <article class="player-card">
+          <div class="player-avatar">
+            <div class="player-silhouette-card"></div>
           </div>
-          <div class="card-subtitle" id="lesson-description">
-            Découvre la rangée de base (F, J, D, K, S, L, A, ;) et la position des doigts.
+          <div class="player-meta">
+            <span>Note 91</span>
+            <span>Vitesse ★★★★☆</span>
           </div>
-        </div>
-        <div>
-          <span class="role-label role-eleve" id="role-label">Mode Élève</span>
-        </div>
+          <div class="player-name">Ailier explosif</div>
+          <div class="player-role">Couloir droit — Percussions & dribbles</div>
+        </article>
+
+        <article class="player-card">
+          <div class="player-avatar">
+            <div class="player-silhouette-card"></div>
+          </div>
+          <div class="player-meta">
+            <span>Note 90</span>
+            <span>Vision ★★★★★</span>
+          </div>
+          <div class="player-name">Meneur créatif</div>
+          <div class="player-role">Numéro 10 — Passes décisives & vista</div>
+        </article>
+
+        <article class="player-card">
+          <div class="player-avatar">
+            <div class="player-silhouette-card"></div>
+          </div>
+          <div class="player-meta">
+            <span>Note 89</span>
+            <span>Arrêts ★★★★★</span>
+          </div>
+          <div class="player-name">Gardien muraille</div>
+          <div class="player-role">Dernier rempart — réflexes & sang‑froid</div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- CÔTÉ OM -->
+    <section class="side side-om">
+      <div class="om-header">Marseille dépité…</div>
+      <div class="om-sub">La nuit est longue sur la Canebière.</div>
+
+      <div class="om-score">
+        Score fictif : <span>PSG 2‑0 OM</span>
       </div>
 
-      <p class="tagline" id="tagline">
-        Commence à taper dès que tu es prêt·e. FastTap mesure ta vitesse (mots/minute) et ta précision en temps réel.
-      </p>
-
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-label">Vitesse</div>
-          <div class="metric-value"><span id="wpm">0</span> MPM</div>
-          <div class="metric-trend positive" id="wpm-trend">Objectif : 35 MPM</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Précision</div>
-          <div class="metric-value"><span id="accuracy">100</span> %</div>
-          <div class="metric-trend" id="accuracy-trend">0 erreur</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Temps</div>
-          <div class="metric-value"><span id="time">0</span> s</div>
-          <div class="metric-trend" id="time-trend">En cours</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Progression</div>
-          <div class="metric-value"><span id="lesson-progress">0</span> %</div>
-          <div class="metric-trend" id="lesson-trend">Leçon en cours</div>
-        </div>
+      <div class="om-mood">
+        Les regards se baissent, les écharpes se rangent, pendant qu’à Paris on brode une nouvelle étoile sur le maillot.
       </div>
+    </section>
 
-      <div class="lesson-selector" id="lesson-selector">
-        <!-- Leçons pour tous les rôles -->
-        <div class="lesson-chip active" data-lesson="base">
-          Rangée de base
-          <span class="level">A1</span>
-        </div>
-        <div class="lesson-chip" data-lesson="mots">
-          Mots simples
-          <span class="level">A2</span>
-        </div>
-        <div class="lesson-chip" data-lesson="phrases">
-          Phrases courtes
-          <span class="level">B1</span>
-        </div>
-        <div class="lesson-chip child" data-lesson="jeu-enfant">
-          Jeu enfant
-          <span class="level">Ludique</span>
-        </div>
-        <div class="lesson-chip teacher" data-lesson="dictee">
-          Dictée guidée
-          <span class="level">Classe</span>
-        </div>
-        <div class="lesson-chip ergo" data-lesson="adaptation">
-          Adaptation ergo
-          <span class="level">Personnalisé</span>
-        </div>
-      </div>
+  </main>
 
-      <div class="typing-area">
-        <div class="typing-target" id="typing-target"></div>
+  <footer>
+    Design fictif, sans logos ni joueurs réels. Remplace les silhouettes et visuels par tes propres créations 2D/3D.
+  </footer>
 
-        <div class="typing-input-wrapper">
-          <input
-            id="typing-input"
-            class="typing-input"
-            type="text"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="Tape ici le texte affiché ci-dessus…"
-          />
-          <button class="typing-cta" id="start-btn">
-            ▶ Démarrer
-          </button>
-          <button class="typing-cta secondary" id="reset-btn">
-            ↺ Réinitialiser
-          </button>
-        </div>
-
-        <div class="typing-footer">
-          <div class="hint" id="hint">
-            Astuce : garde tes index sur <span class="key">F</span> et <span class="key">J</span>.
-          </div>
-          <div class="hint">
-            Raccourcis :
-            <span class="key">Entrée</span> = nouvelle leçon,
-            <span class="key">Échap</span> = réinitialiser
-          </div>
-        </div>
-
-        <div class="keyboard" id="keyboard">
-          <div class="keyboard-row">
-            <div class="key">²</div>
-            <div class="key">1</div>
-            <div class="key">2</div>
-            <div class="key">3</div>
-            <div class="key">4</div>
-            <div class="key">5</div>
-            <div class="key">6</div>
-            <div class="key">7</div>
-            <div class="key">8</div>
-            <div class="
+</body>
+</html>
