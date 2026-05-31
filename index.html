@@ -1,997 +1,842 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Canada Revision Trainer</title>
+  <meta charset="UTF-8" />
+  <title>FastTap - Apprendre à taper vite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #f97316;
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --text: #e5e7eb;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --card: #020617;
+      --border: #1f2937;
+      --child: #a855f7;
+      --teacher: #22c55e;
+      --ergo: #facc15;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-<style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+    body {
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-body{
-background:linear-gradient(135deg,#0f172a,#1e293b);
-color:white;
-min-height:100vh;
-padding:20px;
-}
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
 
-.container{
-max-width:1200px;
-margin:auto;
-}
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
 
-h1{
-text-align:center;
-font-size:3rem;
-margin-bottom:10px;
-}
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
 
-.subtitle{
-text-align:center;
-opacity:0.8;
-margin-bottom:30px;
-}
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: conic-gradient(from 180deg, #f97316, #22c55e, #2563eb, #a855f7, #f97316);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #020617;
+      font-size: 0.9rem;
+      font-weight: 900;
+      box-shadow: 0 0 18px rgba(59, 130, 246, 0.7);
+    }
 
-.tabs{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-justify-content:center;
-margin-bottom:25px;
-}
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
 
-.tab{
-background:#334155;
-border:none;
-padding:12px 18px;
-border-radius:12px;
-cursor:pointer;
-color:white;
-font-weight:bold;
-transition:0.3s;
-}
+    .nav-links button {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.18s ease-out;
+      opacity: 0.8;
+    }
 
-.tab:hover{
-background:#475569;
-}
+    .nav-links button span.badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
 
-.tab.active{
-background:#2563eb;
-}
+    .nav-links button[data-role="eleve"] {
+      border-color: rgba(37, 99, 235, 0.5);
+    }
 
-.card{
-background:rgba(255,255,255,0.08);
-padding:25px;
-border-radius:20px;
-margin-bottom:20px;
-border:1px solid rgba(255,255,255,0.1);
-backdrop-filter:blur(8px);
-}
+    .nav-links button[data-role="enfant"] {
+      border-color: rgba(168, 85, 247, 0.5);
+    }
 
-.hidden{
-display:none;
-}
+    .nav-links button[data-role="enseignant"] {
+      border-color: rgba(34, 197, 94, 0.5);
+    }
 
-.fact{
-background:rgba(255,255,255,0.05);
-padding:15px;
-border-radius:12px;
-margin-bottom:20px;
-line-height:1.7;
-border-left:5px solid #3b82f6;
-}
+    .nav-links button[data-role="ergo"] {
+      border-color: rgba(250, 204, 21, 0.5);
+    }
 
-button{
-background:#2563eb;
-color:white;
-border:none;
-padding:12px 18px;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
-transition:0.3s;
-}
+    .nav-links button.active {
+      background: linear-gradient(135deg, #2563eb, #f97316);
+      border-color: transparent;
+      color: #0b1120;
+      opacity: 1;
+      box-shadow: 0 0 18px rgba(59, 130, 246, 0.7);
+    }
 
-button:hover{
-background:#1d4ed8;
-}
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 2.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.2fr);
+      gap: 1.5rem;
+    }
 
-.answer-btn{
-display:block;
-width:100%;
-margin-top:10px;
-text-align:left;
-background:#334155;
-}
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
 
-.answer-btn.correct{
-background:#16a34a;
-}
+    .card {
+      background: radial-gradient(circle at top left, #111827 0, #020617 60%);
+      border-radius: 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      padding: 1.25rem 1.4rem;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
 
-.answer-btn.wrong{
-background:#dc2626;
-}
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(59, 130, 246, 0.15), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
 
-.question{
-margin-bottom:25px;
-padding:15px;
-background:rgba(255,255,255,0.03);
-border-radius:12px;
-}
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
 
-.score{
-margin-top:20px;
-font-size:1.3rem;
-font-weight:bold;
-}
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-.flashcard{
-perspective:1000px;
-cursor:pointer;
-}
+    .pill {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.85;
+    }
 
-.flashcard-inner{
-transition:transform 0.6s;
-transform-style:preserve-3d;
-position:relative;
-min-height:250px;
-}
+    .card-subtitle {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
 
-.flashcard.flip .flashcard-inner{
-transform:rotateY(180deg);
-}
+    .tagline {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 0.75rem;
+    }
 
-.flash-front,
-.flash-back{
-position:absolute;
-width:100%;
-height:250px;
-backface-visibility:hidden;
-display:flex;
-justify-content:center;
-align-items:center;
-border-radius:20px;
-font-size:1.5rem;
-padding:20px;
-text-align:center;
-}
+    .metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
 
-.flash-front{
-background:#1e293b;
-}
+    .metric {
+      padding: 0.5rem 0.7rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 90px;
+    }
 
-.flash-back{
-background:#2563eb;
-transform:rotateY(180deg);
-}
+    .metric-label {
+      color: #9ca3af;
+      font-size: 0.7rem;
+    }
 
-input,
-textarea,
-select{
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-margin-top:10px;
-font-size:16px;
-}
+    .metric-value {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
 
-textarea{
-height:180px;
-resize:none;
-}
+    .metric-trend {
+      font-size: 0.7rem;
+    }
 
-.progress{
-height:20px;
-background:#334155;
-border-radius:20px;
-overflow:hidden;
-margin-top:10px;
-}
+    .metric-trend.positive {
+      color: var(--success);
+    }
 
-.progress-bar{
-height:100%;
-width:0%;
-background:#22c55e;
-transition:0.5s;
-}
+    .metric-trend.negative {
+      color: var(--danger);
+    }
 
-.timer{
-font-size:1.2rem;
-margin-bottom:15px;
-color:#facc15;
-}
+    .lesson-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
 
-.memory-list{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-}
+    .lesson-chip {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.25rem 0.7rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.8);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s ease-out;
+    }
 
-.memory-item{
-background:#1e293b;
-padding:15px;
-border-radius:12px;
-}
+    .lesson-chip span.level {
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
 
-@media(max-width:700px){
+    .lesson-chip.active {
+      background: linear-gradient(135deg, #2563eb, #f97316);
+      border-color: transparent;
+      color: #020617;
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.7);
+    }
 
-h1{
-font-size:2rem;
-}
+    .lesson-chip.child {
+      border-color: rgba(168, 85, 247, 0.7);
+    }
 
-}
+    .lesson-chip.teacher {
+      border-color: rgba(34, 197, 94, 0.7);
+    }
 
-</style>
+    .lesson-chip.ergo {
+      border-color: rgba(250, 204, 21, 0.7);
+    }
+
+    .typing-area {
+      margin-top: 0.5rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, #111827 0, #020617 60%);
+      padding: 0.9rem 0.9rem 0.8rem;
+      position: relative;
+    }
+
+    .typing-target {
+      min-height: 60px;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 0.6rem;
+      word-wrap: break-word;
+    }
+
+    .typing-target span {
+      padding: 0 1px;
+      border-radius: 3px;
+    }
+
+    .typing-target span.done {
+      color: #6ee7b7;
+    }
+
+    .typing-target span.current {
+      background: rgba(59, 130, 246, 0.25);
+      border-bottom: 2px solid #60a5fa;
+    }
+
+    .typing-target span.error {
+      background: rgba(248, 113, 113, 0.25);
+      color: #fecaca;
+    }
+
+    .typing-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .typing-input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.5rem 0.9rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .typing-input:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5);
+    }
+
+    .typing-cta {
+      border-radius: 999px;
+      border: none;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.7);
+    }
+
+    .typing-cta.secondary {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: #e5e7eb;
+      box-shadow: none;
+    }
+
+    .typing-footer {
+      margin-top: 0.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      flex-wrap: wrap;
+    }
+
+    .typing-footer .hint {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .typing-footer .hint span.key {
+      border-radius: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 0.05rem 0.3rem;
+      font-size: 0.7rem;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .keyboard {
+      margin-top: 0.8rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 0.5rem;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617);
+      display: grid;
+      gap: 0.25rem;
+      font-size: 0.7rem;
+    }
+
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .key {
+      min-width: 22px;
+      padding: 0.25rem 0.3rem;
+      border-radius: 0.4rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      text-align: center;
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      box-shadow: 0 2px 0 rgba(15, 23, 42, 0.9);
+    }
+
+    .key.highlight {
+      background: linear-gradient(135deg, #2563eb, #f97316);
+      color: #020617;
+      border-color: transparent;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+    }
+
+    .key.home {
+      border-color: rgba(248, 250, 252, 0.7);
+    }
+
+    .key.wide {
+      min-width: 40px;
+    }
+
+    .key.space {
+      min-width: 120px;
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.25rem 0.7rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.8);
+      opacity: 0.8;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, #2563eb, #f97316);
+      border-color: transparent;
+      color: #020617;
+      opacity: 1;
+      box-shadow: 0 0 14px rgba(59, 130, 246, 0.7);
+    }
+
+    .progress-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 260px;
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+
+    .progress-item {
+      border-radius: 0.8rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 0.45rem 0.6rem;
+      font-size: 0.8rem;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .progress-main {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .progress-title {
+      font-weight: 500;
+      font-size: 0.8rem;
+    }
+
+    .progress-meta {
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e, #f97316);
+      width: 0%;
+    }
+
+    .progress-stats {
+      text-align: right;
+      font-size: 0.7rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .badge-soft {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.1rem 0.45rem;
+      font-size: 0.7rem;
+    }
+
+    .role-label {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.9;
+    }
+
+    .role-eleve {
+      border-color: rgba(37, 99, 235, 0.7);
+      color: #93c5fd;
+    }
+
+    .role-enfant {
+      border-color: rgba(168, 85, 247, 0.7);
+      color: #e9d5ff;
+    }
+
+    .role-enseignant {
+      border-color: rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+    }
+
+    .role-ergo {
+      border-color: rgba(250, 204, 21, 0.7);
+      color: #fef9c3;
+    }
+
+    .role-context {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .role-context strong {
+      color: #e5e7eb;
+    }
+
+    .role-context small {
+      font-size: 0.7rem;
+      opacity: 0.9;
+    }
+
+    .role-tips {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .role-tips li {
+      margin-left: 1rem;
+    }
+
+    .pill-small {
+      font-size: 0.65rem;
+      padding: 0.05rem 0.4rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-bottom: 0.4rem;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1.1fr 1.1fr;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .small-input {
+      width: 100%;
+      border-radius: 0.6rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.35rem 0.6rem;
+      color: var(--text);
+      font-size: 0.75rem;
+      outline: none;
+    }
+
+    .small-input:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5);
+    }
+
+    .small-label {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-bottom: 0.15rem;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.2rem;
+    }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.1rem 0.45rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.9);
+      opacity: 0.85;
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, #2563eb, #f97316);
+      border-color: transparent;
+      color: #020617;
+      opacity: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 1.25rem 1.2rem;
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    footer span {
+      color: #e5e7eb;
+    }
+  </style>
 </head>
 <body>
-
-<div class="container">
-
-<h1>🇨🇦 Canada Trainer</h1>
-<p class="subtitle">
-Révise efficacement avec plusieurs méthodes d’apprentissage
-</p>
-
-<div class="tabs">
-
-<button class="tab active" onclick="showTab('lesson',event)">
-Cours
-</button>
-
-<button class="tab" onclick="showTab('quiz',event)">
-QCM
-</button>
-
-<button class="tab" onclick="showTab('truefalse',event)">
-Vrai/Faux
-</button>
-
-<button class="tab" onclick="showTab('flashcards',event)">
-Flashcards
-</button>
-
-<button class="tab" onclick="showTab('matching',event)">
-Association
-</button>
-
-<button class="tab" onclick="showTab('speed',event)">
-Rapide
-</button>
-
-<button class="tab" onclick="showTab('typing',event)">
-Écriture
-</button>
-
-<button class="tab" onclick="showTab('memory',event)">
-Mémoire
-</button>
-
-</div>
-
-<!-- ================= COURS ================= -->
-
-<div id="lesson" class="card section">
-
-<h2>📘 Leçon</h2>
-
-<div class="fact">
-Canada is in Northern America, and its capital is Ottawa.
-</div>
-
-<div class="fact">
-There are no States in Canada but Territories (Yukon)
-and Provinces (Ontario).
-</div>
-
-<div class="fact">
-Inuits were the first inhabitants of Canada:
-they lived in the north (Nunavut).
-</div>
-
-<div class="fact">
-Canada is surrounded by three oceans:
-<ul style="margin-top:10px;margin-left:20px;">
-<li>North → Arctic Ocean</li>
-<li>West → Pacific Ocean</li>
-<li>East → Atlantic Ocean</li>
-</ul>
-</div>
-
-<div class="fact">
-It has a border with Alaska in the northwest,
-and with the USA in the south.
-</div>
-
-<div class="fact">
-Canada is the second largest country in the world after Russia.
-</div>
-
-</div>
-
-<!-- ================= QCM ================= -->
-
-<div id="quiz" class="card section hidden">
-
-<h2>🧠 QCM</h2>
-
-<div id="quiz-container"></div>
-
-<div class="score" id="quiz-score"></div>
-
-</div>
-
-<!-- ================= VRAI FAUX ================= -->
-
-<div id="truefalse" class="card section hidden">
-
-<h2>✅❌ Vrai ou Faux</h2>
-
-<div id="tf-container"></div>
-
-<div class="score" id="tf-score"></div>
-
-</div>
-
-<!-- ================= FLASHCARDS ================= -->
-
-<div id="flashcards" class="card section hidden">
-
-<h2>🃏 Flashcards</h2>
-
-<div class="flashcard" onclick="flipCard()">
-
-<div class="flashcard-inner">
-
-<div class="flash-front" id="flash-front">
-What is the capital of Canada?
-</div>
-
-<div class="flash-back" id="flash-back">
-Ottawa
-</div>
-
-</div>
-
-</div>
-
-<br>
-
-<button onclick="nextCard()">Carte suivante</button>
-
-</div>
-
-<!-- ================= ASSOCIATION ================= -->
-
-<div id="matching" class="card section hidden">
-
-<h2>🔗 Association</h2>
-
-<div id="matching-container"></div>
-
-<div class="score" id="matching-score"></div>
-
-</div>
-
-<!-- ================= RAPIDE ================= -->
-
-<div id="speed" class="card section hidden">
-
-<h2>⚡ Mode Rapide</h2>
-
-<div class="timer">
-Temps restant :
-<span id="speedTime">30</span>s
-</div>
-
-<h3 id="speedQuestion"></h3>
-
-<input type="text" id="speedInput" placeholder="Ta réponse...">
-
-<br><br>
-
-<button onclick="checkSpeed()">Valider</button>
-
-<div class="score" id="speedScore"></div>
-
-</div>
-
-<!-- ================= ECRITURE ================= -->
-
-<div id="typing" class="card section hidden">
-
-<h2>✍️ Écriture libre</h2>
-
-<p>
-Écris tout ce dont tu te souviens :
-</p>
-
-<textarea id="writingBox"></textarea>
-
-<br><br>
-
-<button onclick="analyzeWriting()">
-Analyser
-</button>
-
-<div class="score" id="writingResult"></div>
-
-</div>
-
-<!-- ================= MEMOIRE ================= -->
-
-<div id="memory" class="card section hidden">
-
-<h2>🧩 Méthodes de mémorisation</h2>
-
-<div class="memory-list">
-
-<div class="memory-item">
-<h3>🇨🇦 Ottawa</h3>
-<p>
-Imagine un énorme parlement avec un drapeau canadien.
-</p>
-</div>
-
-<div class="memory-item">
-<h3>🌊 3 océans</h3>
-<p>
-Nord = Arctic<br>
-Ouest = Pacific<br>
-Est = Atlantic
-</p>
-</div>
-
-<div class="memory-item">
-<h3>🧊 Inuits</h3>
-<p>
-Pense à la neige du Nunavut.
-</p>
-</div>
-
-<div class="memory-item">
-<h3>🌍 2e plus grand pays</h3>
-<p>
-Canada juste après la Russie.
-</p>
-</div>
-
-</div>
-
-<br>
-
-<h3>Progression</h3>
-
-<div class="progress">
-<div class="progress-bar" id="progressBar"></div>
-</div>
-
-<br>
-
-<button onclick="increaseProgress()">
-J'ai révisé
-</button>
-
-</div>
-
-</div>
-
-<script>
-
-/* ================= ONGLETS ================= */
-
-function showTab(id,event){
-
-document.querySelectorAll('.section').forEach(sec=>{
-sec.classList.add('hidden');
-});
-
-document.getElementById(id).classList.remove('hidden');
-
-document.querySelectorAll('.tab').forEach(tab=>{
-tab.classList.remove('active');
-});
-
-event.target.classList.add('active');
-
-}
-
-/* ================= QCM ================= */
-
-const quizData = [
-
-{
-q:"What is the capital of Canada?",
-a:["Toronto","Ottawa","Montreal","Quebec"],
-correct:1
-},
-
-{
-q:"How many oceans surround Canada?",
-a:["1","2","3","4"],
-correct:2
-},
-
-{
-q:"Who were the first inhabitants?",
-a:["Romans","Inuits","French","Americans"],
-correct:1
-},
-
-{
-q:"What is an example of a territory?",
-a:["Ontario","Yukon","Paris","Mexico"],
-correct:1
-}
-
-];
-
-let quizScore = 0;
-
-const quizContainer =
-document.getElementById("quiz-container");
-
-quizData.forEach((item,index)=>{
-
-const div = document.createElement("div");
-
-div.classList.add("question");
-
-div.innerHTML = `
-<h3>${index+1}. ${item.q}</h3>
-`;
-
-item.a.forEach((answer,i)=>{
-
-const btn = document.createElement("button");
-
-btn.classList.add("answer-btn");
-
-btn.innerText = answer;
-
-btn.onclick = ()=>{
-
-if(btn.classList.contains("done")) return;
-
-btn.classList.add("done");
-
-if(i === item.correct){
-
-btn.classList.add("correct");
-
-quizScore++;
-
-}else{
-
-btn.classList.add("wrong");
-
-}
-
-document.getElementById("quiz-score")
-.innerHTML =
-"Score : " + quizScore + " / " + quizData.length;
-
-};
-
-div.appendChild(btn);
-
-});
-
-quizContainer.appendChild(div);
-
-});
-
-/* ================= VRAI FAUX ================= */
-
-const tfData = [
-
-{
-q:"Ottawa is the capital of Canada.",
-a:true
-},
-
-{
-q:"Canada has states like the USA.",
-a:false
-},
-
-{
-q:"Canada is surrounded by 3 oceans.",
-a:true
-},
-
-{
-q:"Inuits lived mainly in the south.",
-a:false
-}
-
-];
-
-let tfScore = 0;
-
-const tfContainer =
-document.getElementById("tf-container");
-
-tfData.forEach((item,index)=>{
-
-const div = document.createElement("div");
-
-div.classList.add("question");
-
-div.innerHTML = `
-<h3>${index+1}. ${item.q}</h3>
-`;
-
-const trueBtn = document.createElement("button");
-trueBtn.innerText = "Vrai";
-
-const falseBtn = document.createElement("button");
-falseBtn.innerText = "Faux";
-
-trueBtn.style.marginRight = "10px";
-
-function answer(user){
-
-if(div.classList.contains("done")) return;
-
-div.classList.add("done");
-
-if(user === item.a){
-
-tfScore++;
-
-div.style.borderLeft =
-"5px solid #16a34a";
-
-}else{
-
-div.style.borderLeft =
-"5px solid #dc2626";
-
-}
-
-document.getElementById("tf-score")
-.innerHTML =
-"Score : " + tfScore + " / " + tfData.length;
-
-}
-
-trueBtn.onclick = ()=>answer(true);
-falseBtn.onclick = ()=>answer(false);
-
-div.appendChild(trueBtn);
-div.appendChild(falseBtn);
-
-tfContainer.appendChild(div);
-
-});
-
-/* ================= FLASHCARDS ================= */
-
-const flashcards = [
-
-{
-q:"Capital of Canada?",
-a:"Ottawa"
-},
-
-{
-q:"How many oceans surround Canada?",
-a:"3 oceans"
-},
-
-{
-q:"First inhabitants?",
-a:"Inuits"
-},
-
-{
-q:"Largest country after Russia?",
-a:"Canada"
-}
-
-];
-
-let flashIndex = 0;
-let flipped = false;
-
-function flipCard(){
-
-const card =
-document.querySelector(".flashcard");
-
-flipped = !flipped;
-
-if(flipped){
-
-card.classList.add("flip");
-
-}else{
-
-card.classList.remove("flip");
-
-}
-
-}
-
-function nextCard(){
-
-flashIndex++;
-
-if(flashIndex >= flashcards.length){
-
-flashIndex = 0;
-
-}
-
-document.getElementById("flash-front")
-.innerText = flashcards[flashIndex].q;
-
-document.getElementById("flash-back")
-.innerText = flashcards[flashIndex].a;
-
-document.querySelector(".flashcard")
-.classList.remove("flip");
-
-flipped = false;
-
-}
-
-/* ================= ASSOCIATION ================= */
-
-const matchingData = [
-
-{
-left:"Capital",
-right:"Ottawa"
-},
-
-{
-left:"Northern Ocean",
-right:"Arctic Ocean"
-},
-
-{
-left:"Territory",
-right:"Yukon"
-},
-
-{
-left:"First inhabitants",
-right:"Inuits"
-}
-
-];
-
-const matchingContainer =
-document.getElementById("matching-container");
-
-matchingData.forEach((item,index)=>{
-
-const div = document.createElement("div");
-
-div.classList.add("question");
-
-div.innerHTML = `
-<p><b>${item.left}</b></p>
-
-<select id="match${index}">
-<option value="">Choisir</option>
-<option>Ottawa</option>
-<option>Arctic Ocean</option>
-<option>Yukon</option>
-<option>Inuits</option>
-</select>
-`;
-
-matchingContainer.appendChild(div);
-
-});
-
-const matchBtn = document.createElement("button");
-
-matchBtn.innerText = "Vérifier";
-
-matchBtn.onclick = ()=>{
-
-let good = 0;
-
-matchingData.forEach((item,index)=>{
-
-const value =
-document.getElementById("match"+index).value;
-
-if(value === item.right){
-
-good++;
-
-}
-
-});
-
-document.getElementById("matching-score")
-.innerHTML =
-"Résultat : " + good + " / " + matchingData.length;
-
-};
-
-matchingContainer.appendChild(matchBtn);
-
-/* ================= RAPIDE ================= */
-
-const speedQuestions = [
-
-{
-q:"Capital of Canada",
-a:"ottawa"
-},
-
-{
-q:"Northern Ocean",
-a:"arctic ocean"
-},
-
-{
-q:"First inhabitants",
-a:"inuits"
-},
-
-{
-q:"Example of territory",
-a:"yukon"
-}
-
-];
-
-let speedIndex = 0;
-let speedPoints = 0;
-
-function loadSpeed(){
-
-if(speedIndex >= speedQuestions.length){
-
-document.getElementById("speedQuestion")
-.innerHTML = "Fin du jeu";
-
-document.getElementById("speedScore")
-.innerHTML =
-"Score : " + speedPoints;
-
-return;
-
-}
-
-document.getElementById("speedQuestion")
-.innerHTML =
-speedQuestions[speedIndex].q;
-
-document.getElementById("speedInput").value = "";
-
-}
-
-loadSpeed();
-
-function checkSpeed(){
-
-const value =
-document.getElementById("speedInput")
-.value.toLowerCase().trim();
-
-if(value === speedQuestions[speedIndex].a){
-
-speedPoints++;
-
-}
-
-speedIndex++;
-
-loadSpeed();
-
-}
-
-let speedTime = 30;
-
-setInterval(()=>{
-
-if(speedTime > 0){
-
-speedTime--;
-
-document.getElementById("speedTime")
-.innerText = speedTime;
-
-}else{
-
-document.getElementById("speedQuestion")
-.innerHTML =
-"⏰ Temps écoulé";
-
-}
-
-},1000);
-
-/* ================= ECRITURE ================= */
-
-function analyzeWriting(){
-
-const text =
-document.getElementById("writingBox")
-.value.toLowerCase();
-
-const keywords = [
-
-"ottawa",
-"inuits",
-"arctic",
-"pacific",
-"atlantic",
-"yukon",
-"canada",
-"russia"
-
-];
-
-let points = 0;
-
-keywords.forEach(word=>{
-
-if(text.includes(word)){
-
-points++;
-
-}
-
-});
-
-let result = "";
-
-if(points <= 2){
-
-result = "❌ Révise encore.";
-
-}else if(points <= 5){
-
-result = "⚠️ Niveau moyen.";
-
-}else{
-
-result = "✅ Très bon niveau.";
-
-}
-
-document.getElementById("writingResult")
-.innerHTML =
-result + "<br><br>Mots-clés : "
-+ points + " / " + keywords.length;
-
-}
-
-/* ================= PROGRESSION ================= */
-
-let progress = 0;
-
-function increaseProgress(){
-
-progress += 20;
-
-if(progress > 100){
-
-progress = 100;
-
-}
-
-document.getElementById("progressBar")
-.style.width = progress + "%";
-
-}
-
-</script>
-
-</body>
-</html>
+  <header>
+    <div class="nav">
+      <div class="logo">
+        <div class="logo-icon">FT</div>
+        <div>
+          <div>FastTap</div>
+          <div style="font-size:0.7rem;color:#9ca3af;">Écrire vite. Écrire bien. Ensemble.</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <button data-role="eleve" class="active">
+          Élève
+          <span class="badge">Collège / Lycée</span>
+        </button>
+        <button data-role="enfant">
+          Enfant
+          <span class="badge">6–11 ans</span>
+        </button>
+        <button data-role="enseignant">
+          Enseignant
+          <span class="badge">Classe & groupes</span>
+        </button>
+        <button data-role="ergo">
+          Ergothérapeute
+          <span class="badge">Adaptations</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Zone principale : exercice -->
+    <section class="card" id="main-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">
+            <span id="lesson-title">Leçon 1 — Rangée de base</span>
+            <span class="pill" id="lesson-difficulty">Niveau A1</span>
+          </div>
+          <div class="card-subtitle" id="lesson-description">
+            Découvre la rangée de base (F, J, D, K, S, L, A, ;) et la position des doigts.
+          </div>
+        </div>
+        <div>
+          <span class="role-label role-eleve" id="role-label">Mode Élève</span>
+        </div>
+      </div>
+
+      <p class="tagline" id="tagline">
+        Commence à taper dès que tu es prêt·e. FastTap mesure ta vitesse (mots/minute) et ta précision en temps réel.
+      </p>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Vitesse</div>
+          <div class="metric-value"><span id="wpm">0</span> MPM</div>
+          <div class="metric-trend positive" id="wpm-trend">Objectif : 35 MPM</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Précision</div>
+          <div class="metric-value"><span id="accuracy">100</span> %</div>
+          <div class="metric-trend" id="accuracy-trend">0 erreur</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Temps</div>
+          <div class="metric-value"><span id="time">0</span> s</div>
+          <div class="metric-trend" id="time-trend">En cours</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Progression</div>
+          <div class="metric-value"><span id="lesson-progress">0</span> %</div>
+          <div class="metric-trend" id="lesson-trend">Leçon en cours</div>
+        </div>
+      </div>
+
+      <div class="lesson-selector" id="lesson-selector">
+        <!-- Leçons pour tous les rôles -->
+        <div class="lesson-chip active" data-lesson="base">
+          Rangée de base
+          <span class="level">A1</span>
+        </div>
+        <div class="lesson-chip" data-lesson="mots">
+          Mots simples
+          <span class="level">A2</span>
+        </div>
+        <div class="lesson-chip" data-lesson="phrases">
+          Phrases courtes
+          <span class="level">B1</span>
+        </div>
+        <div class="lesson-chip child" data-lesson="jeu-enfant">
+          Jeu enfant
+          <span class="level">Ludique</span>
+        </div>
+        <div class="lesson-chip teacher" data-lesson="dictee">
+          Dictée guidée
+          <span class="level">Classe</span>
+        </div>
+        <div class="lesson-chip ergo" data-lesson="adaptation">
+          Adaptation ergo
+          <span class="level">Personnalisé</span>
+        </div>
+      </div>
+
+      <div class="typing-area">
+        <div class="typing-target" id="typing-target"></div>
+
+        <div class="typing-input-wrapper">
+          <input
+            id="typing-input"
+            class="typing-input"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="Tape ici le texte affiché ci-dessus…"
+          />
+          <button class="typing-cta" id="start-btn">
+            ▶ Démarrer
+          </button>
+          <button class="typing-cta secondary" id="reset-btn">
+            ↺ Réinitialiser
+          </button>
+        </div>
+
+        <div class="typing-footer">
+          <div class="hint" id="hint">
+            Astuce : garde tes index sur <span class="key">F</span> et <span class="key">J</span>.
+          </div>
+          <div class="hint">
+            Raccourcis :
+            <span class="key">Entrée</span> = nouvelle leçon,
+            <span class="key">Échap</span> = réinitialiser
+          </div>
+        </div>
+
+        <div class="keyboard" id="keyboard">
+          <div class="keyboard-row">
+            <div class="key">²</div>
+            <div class="key">1</div>
+            <div class="key">2</div>
+            <div class="key">3</div>
+            <div class="key">4</div>
+            <div class="key">5</div>
+            <div class="key">6</div>
+            <div class="key">7</div>
+            <div class="key">8</div>
+            <div class="
