@@ -1,707 +1,502 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FR-ADS — Régie Publicitaire Premium</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy: #0A0F2E;
-      --red: #E8142A;
-      --white: #FFFFFF;
-      --slate: #8C9BB5;
-      --light: #F2F5FA;
-      --mid: #1C2350;
-      --border: #D4DCE8;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--white);
-      color: var(--navy);
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(10,15,46,0.96);
-      backdrop-filter: blur(8px);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 5vw;
-      height: 64px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 0.12em;
-      color: var(--white);
-    }
-    .nav-logo span { color: var(--red); }
-
-    .nav-links {
-      display: flex; gap: 2.2rem; list-style: none;
-    }
-    .nav-links a {
-      color: rgba(255,255,255,0.72);
-      text-decoration: none;
-      font-size: 0.82rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--white); }
-
-    .nav-cta {
-      background: var(--red);
-      color: var(--white) !important;
-      padding: 0.45rem 1.1rem !important;
-      border-radius: 3px;
-    }
-    .nav-cta:hover { opacity: 0.88; }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      background: var(--navy);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: 0;
-      padding: 64px 0 0;
-    }
-
-    .hero-left {
-      padding: 6vw 4vw 6vw 8vw;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--red);
-      margin-bottom: 1.4rem;
-    }
-    .hero-eyebrow::before {
-      content: ''; width: 24px; height: 2px; background: var(--red);
-    }
-
-    .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3.4rem, 6vw, 6rem);
-      line-height: 0.95;
-      color: var(--white);
-      letter-spacing: 0.03em;
-      margin-bottom: 1.6rem;
-    }
-    .hero-title em {
-      font-style: normal;
-      color: var(--red);
-    }
-
-    .hero-desc {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--slate);
-      max-width: 440px;
-      margin-bottom: 2.4rem;
-    }
-
-    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-    .btn-primary {
-      background: var(--red);
-      color: var(--white);
-      padding: 0.85rem 2rem;
-      border-radius: 3px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      letter-spacing: 0.04em;
-      transition: opacity .2s, transform .15s;
-      border: none; cursor: pointer;
-    }
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-
-    .btn-outline {
-      color: var(--white);
-      padding: 0.85rem 2rem;
-      border-radius: 3px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      border: 1.5px solid rgba(255,255,255,0.28);
-      transition: border-color .2s, background .2s;
-    }
-    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.06); }
-
-    /* ── AD DEMO WIDGET ── */
-    .hero-right {
-      padding: 6vw 8vw 6vw 2vw;
-      display: flex; flex-direction: column; align-items: center; gap: 1.4rem;
-    }
-
-    .demo-label {
-      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em;
-      text-transform: uppercase; color: var(--slate);
-      align-self: flex-start;
-    }
-
-    .demo-browser {
-      width: 100%;
-      max-width: 420px;
-      background: #12183A;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
-    }
-
-    .demo-bar {
-      background: #0E1330;
-      padding: 10px 14px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .demo-dot.r { background: #FF5F57; }
-    .demo-dot.y { background: #FFBD2E; }
-    .demo-dot.g { background: #28C840; }
-    .demo-url {
-      flex: 1; background: rgba(255,255,255,0.07);
-      border-radius: 4px; padding: 4px 10px;
-      font-size: 0.72rem; color: var(--slate);
-    }
-
-    .demo-site {
-      padding: 16px;
-    }
-
-    /* Fake site content */
-    .fake-header {
-      background: rgba(255,255,255,0.05);
-      border-radius: 6px; padding: 10px 14px;
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .fake-logo-bar { display: flex; gap: 6px; }
-    .fake-pill {
-      height: 8px; border-radius: 4px; background: rgba(255,255,255,0.15);
-    }
-    .fake-nav-pills { display: flex; gap: 8px; }
-
-    .fake-content { display: grid; grid-template-columns: 1fr; gap: 10px; }
-
-    .fake-text-block { display: flex; flex-direction: column; gap: 5px; }
-    .fake-line {
-      height: 7px; border-radius: 3px; background: rgba(255,255,255,0.09);
-    }
-
-    /* THE AD SLOT */
-    .fr-ads-slot {
-      border-radius: 8px;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      transition: transform .2s;
-    }
-    .fr-ads-slot:hover { transform: scale(1.015); }
-
-    .fr-ads-badge {
-      position: absolute; top: 6px; right: 6px;
-      background: rgba(10,15,46,0.82);
-      color: rgba(255,255,255,0.6);
-      font-size: 0.58rem; font-weight: 600;
-      letter-spacing: 0.1em; padding: 2px 6px;
-      border-radius: 2px; text-transform: uppercase;
-    }
-
-    .ad-creative {
-      width: 100%;
-      padding: 18px 20px;
-      display: flex; align-items: center; gap: 14px;
-      background: linear-gradient(135deg, #E8142A 0%, #6A0F1A 100%);
-      color: white;
-      border-radius: 8px;
-      animation: adFadeIn 0.5s ease;
-    }
-
-    @keyframes adFadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .ad-icon { font-size: 2rem; flex-shrink: 0; }
-
-    .ad-copy { flex: 1; }
-    .ad-copy strong { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; }
-    .ad-copy span { font-size: 0.76rem; opacity: 0.88; }
-
-    .ad-cta-btn {
-      background: white; color: #E8142A;
-      padding: 7px 14px; border-radius: 4px;
-      font-weight: 700; font-size: 0.75rem;
-      white-space: nowrap; flex-shrink: 0;
-      border: none;
-    }
-
-    /* Cycling ads */
-    .ad-blue {
-      background: linear-gradient(135deg, #1A5CE8 0%, #0A1F6A 100%);
-    }
-    .ad-green {
-      background: linear-gradient(135deg, #14A85A 0%, #0A4025 100%);
-    }
-    .ad-cta-blue { background: white; color: #1A5CE8; }
-    .ad-cta-green { background: white; color: #14A85A; }
-
-    .demo-controls {
-      display: flex; gap: 8px;
-    }
-    .demo-dot-ctrl {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      cursor: pointer; border: none; padding: 0;
-      transition: background .2s;
-    }
-    .demo-dot-ctrl.active { background: var(--red); }
-
-    /* ── STATS BAND ── */
-    .stats-band {
-      background: var(--red);
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    .stat-item {
-      padding: 2.5rem 2rem;
-      text-align: center;
-      border-right: 1px solid rgba(255,255,255,0.2);
-    }
-    .stat-item:last-child { border-right: none; }
-
-    .stat-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3.2rem;
-      color: var(--white);
-      line-height: 1;
-      letter-spacing: 0.04em;
-    }
-
-    .stat-label {
-      font-size: 0.76rem; font-weight: 500;
-      color: rgba(255,255,255,0.72);
-      letter-spacing: 0.08em; text-transform: uppercase;
-      margin-top: 0.3rem;
-    }
-
-    /* ── SECTION ── */
-    section { padding: 7rem 8vw; }
-
-    .section-eyebrow {
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--red);
-      display: flex; align-items: center; gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-    .section-eyebrow::before {
-      content: ''; width: 20px; height: 2px; background: var(--red);
-    }
-
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.4rem, 4vw, 3.6rem);
-      letter-spacing: 0.04em;
-      line-height: 1;
-      color: var(--navy);
-      margin-bottom: 1.2rem;
-    }
-
-    .section-sub {
-      font-size: 1rem; color: #4A5580; line-height: 1.7;
-      max-width: 560px;
-    }
-
-    /* ── HOW IT WORKS ── */
-    .how-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      margin-top: 4rem;
-      background: var(--border);
-    }
-
-    .how-card {
-      background: var(--white);
-      padding: 3rem 2.4rem;
-    }
-
-    .how-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 4rem;
-      color: var(--border);
-      line-height: 1;
-      margin-bottom: 1.2rem;
-    }
-
-    .how-icon {
-      width: 48px; height: 48px;
-      background: var(--navy);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .how-title {
-      font-weight: 700; font-size: 1.1rem;
-      color: var(--navy); margin-bottom: 0.6rem;
-    }
-
-    .how-desc {
-      font-size: 0.88rem; color: #4A5580; line-height: 1.65;
-    }
-
-    /* ── INTEGRATION SECTION ── */
-    .integration-section {
-      background: var(--navy);
-      color: var(--white);
-    }
-    .integration-section .section-title { color: var(--white); }
-    .integration-section .section-sub { color: var(--slate); }
-
-    .integration-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5vw;
-      align-items: center;
-      margin-top: 4rem;
-    }
-
-    .code-block {
-      background: #060A1C;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .code-header {
-      background: rgba(255,255,255,0.05);
-      padding: 12px 20px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .code-header span { font-size: 0.78rem; color: var(--slate); font-weight: 500; }
-
-    .copy-btn {
-      background: rgba(255,255,255,0.08);
-      color: var(--slate);
-      border: none; cursor: pointer;
-      padding: 4px 12px; border-radius: 3px;
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.05em; text-transform: uppercase;
-      transition: background .2s, color .2s;
-    }
-    .copy-btn:hover { background: rgba(255,255,255,0.14); color: var(--white); }
-    .copy-btn.copied { color: #28C840; }
-
-    .code-body {
-      padding: 24px 20px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.82rem;
-      line-height: 1.8;
-      color: #A8B8D0;
-      overflow-x: auto;
-    }
-
-    .code-body .kw { color: #7E94FF; }
-    .code-body .str { color: #F7C948; }
-    .code-body .tag { color: #FF7EB3; }
-    .code-body .attr { color: #79E8FF; }
-    .code-body .val { color: #A4FF96; }
-    .code-body .cmt { color: #4A5580; font-style: italic; }
-
-    .integration-features {
-      display: flex; flex-direction: column; gap: 1.6rem;
-    }
-
-    .int-feat {
-      display: flex; gap: 1rem; align-items: flex-start;
-    }
-
-    .int-feat-icon {
-      width: 42px; height: 42px; border-radius: 8px;
-      background: rgba(232,20,42,0.15);
-      border: 1px solid rgba(232,20,42,0.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    .int-feat-text strong {
-      display: block; font-size: 0.96rem; font-weight: 600;
-      margin-bottom: 0.25rem; color: var(--white);
-    }
-    .int-feat-text span { font-size: 0.84rem; color: var(--slate); line-height: 1.55; }
-
-    /* ── FORMATS ── */
-    .formats-section { background: var(--light); }
-
-    .formats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-top: 4rem;
-    }
-
-    .format-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 2rem 1.6rem;
-      transition: border-color .2s, box-shadow .2s, transform .2s;
-    }
-    .format-card:hover {
-      border-color: var(--red);
-      box-shadow: 0 8px 32px rgba(232,20,42,0.1);
-      transform: translateY(-3px);
-    }
-
-    .format-icon { font-size: 2rem; margin-bottom: 1rem; }
-
-    .format-name {
-      font-weight: 700; font-size: 1rem;
-      color: var(--navy); margin-bottom: 0.4rem;
-    }
-
-    .format-size {
-      font-size: 0.78rem; color: var(--red);
-      font-weight: 600; letter-spacing: 0.06em;
-      margin-bottom: 0.7rem;
-    }
-
-    .format-desc { font-size: 0.84rem; color: #4A5580; line-height: 1.55; }
-
-    /* ── PARTNER LOGOS ── */
-    .partners-section { text-align: center; }
-
-    .partners-row {
-      display: flex; align-items: center; justify-content: center;
-      gap: 3rem; flex-wrap: wrap;
-      margin-top: 3rem;
-    }
-
-    .partner-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem;
-      letter-spacing: 0.12em;
-      color: var(--border);
-      transition: color .2s;
-    }
-    .partner-logo:hover { color: var(--slate); }
-
-    /* ── CTA SECTION ── */
-    .cta-section {
-      background: var(--navy);
-      text-align: center;
-      padding: 8rem 8vw;
-    }
-    .cta-section .section-eyebrow { justify-content: center; }
-    .cta-section .section-eyebrow::before { display: none; }
-    .cta-section .section-title { color: var(--white); }
-
-    .cta-desc {
-      font-size: 1rem; color: var(--slate);
-      max-width: 480px; margin: 1rem auto 2.5rem;
-      line-height: 1.7;
-    }
-
-    .cta-actions {
-      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-    }
-
-    /* ── CONTACT FORM ── */
-    .contact-section {
-      background: var(--light);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 6vw;
-      align-items: start;
-      margin-top: 4rem;
-    }
-
-    .contact-info { display: flex; flex-direction: column; gap: 2rem; }
-
-    .contact-item strong {
-      display: block; font-weight: 700; font-size: 0.88rem;
-      color: var(--navy); margin-bottom: 0.2rem;
-    }
-    .contact-item span { font-size: 0.88rem; color: #4A5580; }
-
-    .form-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.2rem; }
-
-    label { font-size: 0.8rem; font-weight: 600; color: var(--navy); letter-spacing: 0.04em; }
-
-    input, select, textarea {
-      border: 1.5px solid var(--border);
-      border-radius: 5px;
-      padding: 0.75rem 1rem;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
-      color: var(--navy);
-      background: var(--white);
-      transition: border-color .2s;
-      outline: none;
-    }
-    input:focus, select:focus, textarea:focus { border-color: var(--navy); }
-
-    textarea { resize: vertical; min-height: 110px; }
-
-    .form-submit {
-      width: 100%;
-      margin-top: 0.4rem;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #060A1C;
-      padding: 4rem 8vw 2rem;
-    }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr 1fr;
-      gap: 3vw;
-      padding-bottom: 3rem;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .footer-brand .nav-logo { font-size: 2rem; }
-    .footer-brand p {
-      margin-top: 1rem; font-size: 0.84rem; color: var(--slate);
-      line-height: 1.65; max-width: 240px;
-    }
-
-    .footer-col h4 {
-      font-size: 0.76rem; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(255,255,255,0.4);
-      margin-bottom: 1.2rem;
-    }
-
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
-    .footer-col ul a {
-      font-size: 0.86rem; color: var(--slate);
-      text-decoration: none; transition: color .2s;
-    }
-    .footer-col ul a:hover { color: var(--white); }
-
-    .footer-bottom {
-      padding-top: 2rem;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .footer-bottom span { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
-      .hero-right { padding: 2rem 8vw 5rem; }
-      .how-grid { grid-template-columns: 1fr; }
-      .integration-grid { grid-template-columns: 1fr; }
-      .formats-grid { grid-template-columns: repeat(2, 1fr); }
-      .stats-band { grid-template-columns: repeat(2, 1fr); }
-      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 580px) {
-      .nav-links { display: none; }
-      .formats-grid { grid-template-columns: 1fr; }
-      .stats-band { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr; }
-    }
-
-    /* ── SCROLL REVEAL ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGS — Smart Gallery System · Galerie embarquable pour créateurs</title>
+<meta name="description" content="SGS (Smart Gallery System) : la galerie embarquable, personnalisable par palette de couleurs, que créateurs et marques intègrent sur leur site pour présenter leurs créations, sans limite d'images.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12151A;
+    --panel:#171B21;
+    --glass:rgba(255,255,255,.045);
+    --glass-b:rgba(255,255,255,.09);
+    --paper:#F6F3EC;
+    --brass:#B8874A;
+    --brass-bright:#E4B573;
+    --ash:#9AA3B2;
+    --text:#EDEAE3;
+    --radius:18px;
+    --display:'Fraunces', serif;
+    --body:'Manrope', system-ui, -apple-system, sans-serif;
+    --mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--ink); color:var(--text); font-family:var(--body);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{ background: var(--brass); color:#12151A; }
+
+  /* ambient background texture */
+  body::before{
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(900px 500px at 12% -10%, rgba(184,135,74,.14), transparent 60%),
+      radial-gradient(700px 500px at 100% 10%, rgba(184,135,74,.08), transparent 60%);
+  }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  /* NAV */
+  nav.top{ position:sticky; top:0; z-index:50; backdrop-filter: blur(14px); background: rgba(18,21,26,.72); border-bottom:1px solid var(--glass-b); }
+  nav.top .wrap{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:19px; letter-spacing:.01em; text-decoration:none; }
+  .brand .mark{ width:26px; height:26px; border-radius:7px; background: conic-gradient(from 200deg, var(--brass-bright), var(--brass), #6b4c22, var(--brass-bright)); box-shadow: 0 0 0 1px rgba(255,255,255,.15) inset; }
+  .navlinks{ display:flex; gap:28px; font-size:14px; font-weight:600; color:var(--ash);}
+  .navlinks a{ text-decoration:none; transition:color .2s;}
+  .navlinks a:hover{ color:var(--text); }
+  .btn{ display:inline-flex; align-items:center; gap:8px; border-radius:999px; font-weight:700; font-size:13.5px; padding:10px 20px; cursor:pointer; border:1px solid transparent; text-decoration:none; transition: transform .2s, box-shadow .2s, background .2s; }
+  .btn-brass{ background: linear-gradient(140deg, var(--brass-bright), var(--brass)); color:#191308; box-shadow: 0 10px 26px -12px rgba(184,135,74,.7);}
+  .btn-brass:hover{ transform:translateY(-2px); box-shadow: 0 16px 30px -12px rgba(184,135,74,.85); }
+  .btn-ghost{ background:transparent; border-color:var(--glass-b); color:var(--text); }
+  .btn-ghost:hover{ background:var(--glass); }
+  @media (max-width:760px){ .navlinks{display:none;} }
+
+  /* HERO */
+  header.hero{ padding: 84px 0 60px; position:relative; }
+  .hero-grid{ display:grid; grid-template-columns: 1.05fr .95fr; gap:56px; align-items:center; }
+  @media (max-width:960px){ .hero-grid{ grid-template-columns:1fr; } }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--brass-bright); background:rgba(184,135,74,.12); border:1px solid rgba(184,135,74,.35); padding:7px 14px; border-radius:999px; margin-bottom:22px; }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-bright); box-shadow:0 0 10px var(--brass-bright); }
+  h1{ font-family:var(--display); font-size: clamp(38px, 5.4vw, 62px); line-height:1.03; font-weight:700; margin:0 0 22px; letter-spacing:-.01em; }
+  h1 em{ font-style:italic; color:var(--brass-bright); }
+  .lead{ font-size:17.5px; line-height:1.65; color:var(--ash); max-width:52ch; margin:0 0 32px; }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:30px;}
+  .hero-stats{ display:flex; gap:34px; flex-wrap:wrap; }
+  .stat b{ display:block; font-family:var(--display); font-size:23px; color:var(--text); }
+  .stat span{ font-size:12.5px; color:var(--ash); }
+
+  .vitrine{ position:relative; border-radius: 26px; padding:20px; background: linear-gradient(160deg, var(--panel), #12151a); border:1px solid var(--glass-b); box-shadow: 0 40px 90px -40px rgba(0,0,0,.7); }
+  .vitrine::before{ content:''; position:absolute; inset:0; border-radius:26px; padding:1px; background: linear-gradient(160deg, rgba(228,181,115,.5), transparent 40%, rgba(228,181,115,.15)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none;}
+  .vitrine-tag{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; font-size:11.5px; color:var(--ash); font-family:var(--mono); }
+  .vitrine-tag .lights{ display:flex; gap:6px; }
+  .vitrine-tag .lights i{ width:8px; height:8px; border-radius:50%; display:inline-block; background:rgba(255,255,255,.18); }
+  #sgs-hero-demo{ display:block; }
+
+  /* SECTION generic */
+  section{ padding: 78px 0; position:relative; }
+  .kicker{ font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--brass-bright); margin:0 0 12px; }
+  h2{ font-family:var(--display); font-size: clamp(28px, 3.6vw, 40px); font-weight:700; margin:0 0 16px; letter-spacing:-.01em; }
+  .section-sub{ color:var(--ash); font-size:16px; max-width:60ch; line-height:1.6; margin:0 0 44px; }
+
+  /* STEPS */
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  @media (max-width:860px){ .steps{ grid-template-columns:1fr; } }
+  .step{ background:var(--glass); border:1px solid var(--glass-b); border-radius:var(--radius); padding:26px 24px; position:relative; }
+  .step .n{ font-family:var(--display); font-size:15px; color:var(--brass-bright); border:1px solid rgba(228,181,115,.4); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .step h3{ font-size:17px; margin:0 0 8px; font-weight:700; }
+  .step p{ font-size:14.5px; color:var(--ash); line-height:1.55; margin:0; }
+
+  /* BUILDER */
+  .builder{ display:grid; grid-template-columns: 1fr 1.15fr; gap:30px; align-items:start; }
+  @media (max-width:980px){ .builder{ grid-template-columns:1fr; } }
+  .panel{ background:var(--panel); border:1px solid var(--glass-b); border-radius:var(--radius); padding:24px; }
+  .panel h3{ font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:var(--ash); margin:0 0 18px; font-weight:700; }
+
+  .item-row{ display:grid; grid-template-columns: 1fr 1fr 88px 30px; gap:8px; margin-bottom:9px; align-items:center; }
+  .item-row input{ width:100%; }
+  @media (max-width:560px){ .item-row{ grid-template-columns:1fr; } }
+
+  input[type=text], input[type=url], input[type=number], input[type=search]{
+    background:rgba(255,255,255,.04); border:1px solid var(--glass-b); color:var(--text);
+    padding:9px 11px; border-radius:9px; font-family:var(--body); font-size:13px; outline:none; transition:border-color .2s;
+  }
+  input:focus{ border-color:var(--brass); }
+  input::placeholder{ color:#5c6472; }
+
+  .remove-btn{ width:30px; height:30px; border-radius:8px; background:rgba(255,90,90,.08); border:1px solid rgba(255,90,90,.25); color:#ff8f8f; cursor:pointer; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center; }
+  .remove-btn:hover{ background:rgba(255,90,90,.16); }
+
+  .add-btn{ margin-top:6px; width:100%; padding:11px; border-radius:9px; border:1px dashed var(--glass-b); background:transparent; color:var(--ash); font-family:var(--body); font-weight:700; font-size:13px; cursor:pointer; transition: all .2s; }
+  .add-btn:hover{ border-color:var(--brass); color:var(--brass-bright); background:rgba(184,135,74,.06); }
+
+  .divider{ height:1px; background:var(--glass-b); margin:22px 0; }
+
+  .swatches{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+  .swatch{ width:40px; height:40px; border-radius:11px; cursor:pointer; border:2px solid transparent; position:relative; transition: transform .15s; }
+  .swatch:hover{ transform: translateY(-2px); }
+  .swatch.active{ border-color:#fff; }
+  .custom-colors{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .color-field{ display:flex; flex-direction:column; gap:6px; font-size:11.5px; color:var(--ash); font-weight:600;}
+  .color-field input[type=color]{ width:100%; height:34px; border-radius:8px; border:1px solid var(--glass-b); background:transparent; padding:2px; cursor:pointer; }
+
+  .range-row{ display:flex; align-items:center; gap:12px; margin-top:14px; font-size:12.5px; color:var(--ash); }
+  .range-row input[type=range]{ flex:1; accent-color: var(--brass); }
+
+  .preview-shell{ background: var(--ink); border-radius: var(--radius); border:1px solid var(--glass-b); padding:6px; }
+  .preview-frame{ border-radius: calc(var(--radius) - 6px); overflow:hidden; }
+  #sgs-preview{ display:block; }
+
+  .code-box{ margin-top:18px; }
+  .code-tabs{ display:flex; gap:8px; margin-bottom:10px; }
+  .code-tab{ font-size:12px; font-family:var(--mono); padding:6px 12px; border-radius:7px; background:rgba(255,255,255,.05); color:var(--ash); cursor:default; border:1px solid var(--glass-b); }
+  pre.code{ background:#0D0F13; border:1px solid var(--glass-b); border-radius:12px; padding:18px; font-family:var(--mono); font-size:12.3px; line-height:1.65; color:#cfe0d8; overflow:auto; max-height:260px; margin:0; }
+  pre.code .tag{ color:#E4B573; }
+  pre.code .str{ color:#9ecbb0; }
+  pre.code .attr{ color:#7fb3e0; }
+  .copy-row{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; gap:10px; }
+  .copy-row small{ color:var(--ash); font-size:12px; }
+  .copy-btn{ background:var(--brass); color:#191308; border:none; padding:9px 18px; border-radius:999px; font-weight:800; font-size:12.5px; cursor:pointer; transition: transform .15s;}
+  .copy-btn:hover{ transform: translateY(-2px); }
+  .copy-btn.copied{ background: #6cc38f; }
+
+  /* EXAMPLE */
+  .example-frame{ background: var(--panel); border:1px solid var(--glass-b); border-radius: var(--radius); padding: 8px; }
+  .example-credit{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:18px; font-size:13px; color:var(--ash); }
+  .example-credit a{ color:var(--brass-bright); text-decoration:none; font-weight:700; }
+  .example-credit a:hover{ text-decoration:underline; }
+
+  /* FEATURES */
+  .features{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  @media (max-width:960px){ .features{ grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .features{ grid-template-columns:1fr;} }
+  .feature{ border:1px solid var(--glass-b); background:var(--glass); border-radius:14px; padding:20px; }
+  .feature .ico{ font-size:20px; margin-bottom:10px; }
+  .feature h4{ margin:0 0 6px; font-size:14.5px; }
+  .feature p{ margin:0; font-size:13px; color:var(--ash); line-height:1.5; }
+
+  footer{ border-top:1px solid var(--glass-b); padding: 40px 0; }
+  .foot-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .foot-row .brand{ font-size:16px; }
+  .foot-links{ display:flex; gap:20px; font-size:13px; color:var(--ash); }
+  .foot-links a{ text-decoration:none; }
+  .foot-links a:hover{ color:var(--text); }
+  .foot-note{ margin-top:18px; font-size:12px; color:#5c6472; }
+</style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">FR<span>-</span>ADS</div>
-  <ul class="nav-links">
-    <li><a href="#comment-ca-marche">Comment ça marche</a></li>
-    <li><a href="#integration">Intégration</a></li>
-    <li><a href="#formats">Formats</a></li>
-    <li><a href="#contact" class="nav-cta">Devenir partenaire</a></li>
-  </ul>
+<nav class="top">
+  <div class="wrap">
+    <a href="https://xewa.vercel.app" target="_blank" rel="noopener" class="brand"><span class="mark"></span>SGS<span style="color:var(--ash); font-weight:500; font-size:12px; margin-left:4px;">smart gallery system</span></a>
+    <div class="navlinks">
+      <a href="#fonctionnalites">Fonctionnalités</a>
+      <a href="#constructeur">Constructeur</a>
+      <a href="#exemple">Exemple</a>
+      <a href="#code">Code</a>
+    </div>
+    <a href="#constructeur" class="btn btn-brass">Essayer SGS →</a>
+  </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="accueil">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Régie Publicitaire Française</div>
-    <h1 class="hero-title">
-      La pub qui<br/>
-      <em>s'adapte,</em><br/>
-      pas le contraire
-    </h1>
-    <p class="hero-desc">
-      FR-ADS diffuse vos publicités sur un réseau de sites partenaires sélectionnés. 
-      Chaque annonce est conçue, validée et contrôlée par notre équipe — 
-      aucun contenu automatisé, aucune surprise.
-    </p>
-    <div class="hero-actions">
-      <a href="#contact" class="btn-primary">Devenir partenaire</a>
-      <a href="#comment-ca-marche" class="btn-outline">Voir comment ça marche</a>
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Widget embarquable · xewa.vercel.app</div>
+      <h1>La vitrine de vos créations,<br><em>sur votre site.</em></h1>
+      <p class="lead">SGS transforme un simple lien d'image, un nom et un prix en une galerie professionnelle, illimitée en pièces, aux couleurs de votre marque — intégrable en deux lignes de code sur n'importe quel site.</p>
+      <div class="hero-ctas">
+        <a href="#constructeur" class="btn btn-brass">Créer ma galerie</a>
+        <a href="#exemple" class="btn btn-ghost">Voir un exemple réel</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>∞</b><span>images par galerie</span></div>
+        <div class="stat"><b>&lt; 2 min</b><span>d'intégration</span></div>
+        <div class="stat"><b>100%</b><span>couleurs personnalisables</span></div>
+      </div>
+    </div>
+    <div class="vitrine">
+      <div class="vitrine-tag">
+        <span>xewa.vercel.app/embed</span>
+        <span class="lights"><i></i><i></i><i></i></span>
+      </div>
+      <div id="sgs-hero-demo"></div>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="demo-label">Exemple de diffusion en temps réel</div>
-    <div class="demo-browser">
-      <div class="demo-bar">
-        <div class="demo-dot r"></div>
-        <div class="demo-dot y"></div>
-        <div class="demo-dot g"></div>
-        <div class="demo-url">monsite-partenaire.fr</div>
+</header>
+
+<section id="fonctionnalites">
+  <div class="wrap">
+    <p class="kicker">Ce que fait SGS</p>
+    <h2>Une galerie pensée pour les créateurs, pas pour les développeurs</h2>
+    <p class="section-sub">Un seul champ à remplir par création : l'image, le nom, le prix. SGS s'occupe de la mise en page, des animations, du zoom plein écran et du chargement progressif — quel que soit le nombre de pièces.</p>
+    <div class="features">
+      <div class="feature"><div class="ico">🖼️</div><h4>Images illimitées</h4><p>Ajoutez autant de créations que vous voulez ; SGS charge le reste au clic sur « Voir plus », sans jamais ralentir votre site.</p></div>
+      <div class="feature"><div class="ico">🎨</div><h4>Palette sur mesure</h4><p>Accent, fond, texte : chaque couleur se personnalise pour matcher votre identité de marque, en un clic ou au pixel près.</p></div>
+      <div class="feature"><div class="ico">🔍</div><h4>Zoom & navigation</h4><p>Chaque création s'ouvre en grand avec navigation au clavier — l'expérience d'une vraie vitrine, pas d'une simple grille d'images.</p></div>
+      <div class="feature"><div class="ico">⚡</div><h4>2 lignes de code</h4><p>Une balise et un script. Aucune dépendance, aucun compte requis pour l'intégration technique, compatible avec tous les sites.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="comment">
+  <div class="wrap">
+    <p class="kicker">Mise en route</p>
+    <h2>Trois étapes, dans l'ordre</h2>
+    <p class="section-sub">Le constructeur ci-dessous suit exactement ce parcours : renseignez vos pièces, choisissez vos couleurs, copiez le code généré.</p>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Ajoutez vos créations</h3><p>Collez le lien de chaque image, donnez un nom et un prix. Aucune limite de nombre.</p></div>
+      <div class="step"><div class="n">2</div><h3>Choisissez votre palette</h3><p>Partez d'un préréglage ou réglez chaque couleur pour coller à votre charte graphique.</p></div>
+      <div class="step"><div class="n">3</div><h3>Collez le code</h3><p>Copiez le fragment généré dans votre site : la galerie apparaît, déjà en ligne.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="constructeur">
+  <div class="wrap">
+    <p class="kicker">Constructeur en direct</p>
+    <h2>Composez votre galerie</h2>
+    <p class="section-sub">Tout ce que vous changez ici se reflète en temps réel dans l'aperçu et dans le code à copier.</p>
+
+    <div class="builder">
+      <div class="panel">
+        <h3>Vos créations</h3>
+        <div id="item-rows"></div>
+        <button class="add-btn" id="add-item">+ Ajouter une création</button>
+
+        <div class="divider"></div>
+
+        <h3>Palette de couleurs</h3>
+        <div class="swatches" id="swatches"></div>
+        <div class="custom-colors">
+          <div class="color-field">Accent<input type="color" id="c-accent"></div>
+          <div class="color-field">Fond<input type="color" id="c-bg"></div>
+          <div class="color-field">Texte<input type="color" id="c-text"></div>
+        </div>
+
+        <div class="range-row">
+          <span>Coins arrondis</span>
+          <input type="range" id="c-radius" min="0" max="32" value="16">
+        </div>
+        <div class="range-row">
+          <span>Taille des cartes</span>
+          <input type="range" id="c-size" min="160" max="320" value="220">
+        </div>
       </div>
-      <div class="demo-site">
-        <!-- Fake site content -->
-        <div class="fake-header">
-          <div class="fake-logo-bar">
-            <div class="fake-pill" style="width:70px"></div>
-          </div>
-          <div class="fake-nav-pills">
-            <div class="fake-pill" style="width:36px"></div>
-            <div class="fake-pill" style="width:36px"></div>
-            <div class="fake-pill" style="width:36px"></div>
+
+      <div>
+        <div class="panel">
+          <h3>Aperçu en direct</h3>
+          <div class="preview-shell"><div class="preview-frame"><div id="sgs-preview"></div></div></div>
+
+          <div class="code-box" id="code">
+            <div class="code-tabs"><span class="code-tab">html · à coller sur votre site</span></div>
+            <pre class="code" id="code-output"></pre>
+            <div class="copy-row">
+              <small>Nécessite aussi le fichier <code>sgs-embed.js</code> (fourni), hébergé sur votre CDN ou celui de SGS.</small>
+              <button class="copy-btn" id="copy-btn">Copier le code</button>
+            </div>
           </div>
         </div>
-        <div class="fake-content">
-          <div class="fake-text-block">
-            <div class="fake-line" style="width:90%"></div>
-            <div class="fake-line" style="width:78%"></div>
-            <div class="fake-line" style="width:85%"></div>
-          </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-          <!-- FR-ADS SLOT — alimenté par ads-config.js + widget.js -->
-          <div class="fr-ads-slot"></div>
+<section id="exemple">
+  <div class="wrap">
+    <p class="kicker">Cas d'usage</p>
+    <h2>Le même système, sur une vraie boutique</h2>
+    <p class="section-sub">Exemple inspiré d'une bijouterie artisanale : SGS y remplace la grille d'images classique par une vitrine cliquable, avec zoom et navigation entre les pièces.</p>
+    <div class="example-frame">
+      <div id="sgs-example"></div>
+    </div>
+    <div class="example-credit">
+      <span>Démonstration inspirée du fonctionnement de <a href="https://eclat-dor-bijoux.netlify.app" target="_blank" rel="noopener">eclat-dor-bijoux.netlify.app</a> — images de démonstration, à remplacer par vos propres photos.</span>
+      <span>Propulsé par <a href="https://xewa.vercel.app" target="_blank" rel="noopener">SGS</a></span>
+    </div>
+  </div>
+</section>
 
-       
+<footer id="code">
+  <div class="wrap">
+    <div class="foot-row">
+      <a href="https://xewa.vercel.app" target="_blank" rel="noopener" class="brand"><span class="mark"></span>SGS</a>
+      <div class="foot-links">
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#constructeur">Constructeur</a>
+        <a href="#exemple">Exemple</a>
+        <a href="https://xewa.vercel.app" target="_blank" rel="noopener">xewa.vercel.app</a>
+      </div>
+    </div>
+    <p class="foot-note">SGS — Smart Gallery System. Widget de démonstration. Le fichier <code>sgs-embed.js</code> fourni est le script réel utilisé sur cette page.</p>
+  </div>
+</footer>
+
+<script src="sgs-embed.js"></script>
+<script>
+(function(){
+  // ---------- Palettes ----------
+  var PRESETS = [
+    { name:'Vitrine Laiton', accent:'#B8874A', background:'#12151A', surface:'#1B1F26', text:'#EDEAE3', muted:'#9AA3B2' },
+    { name:'Or Rose', accent:'#D98E9B', background:'#171215', surface:'#241C20', text:'#F3E9E7', muted:'#b79ba0' },
+    { name:'Émeraude', accent:'#4E9A78', background:'#0F1613', surface:'#17211C', text:'#E7F0EC', muted:'#8fa79c' },
+    { name:'Saphir', accent:'#6E8FD6', background:'#10131C', surface:'#1A1F2E', text:'#E9ECF6', muted:'#8d97b8' },
+    { name:'Ivoire & Ardoise', accent:'#A9772F', background:'#F6F3EC', surface:'#FFFFFF', text:'#23201B', muted:'#8a8378' },
+    { name:'Corail & Sable', accent:'#D9724A', background:'#1B1712', surface:'#26201A', text:'#F3ECE2', muted:'#a89a8a' }
+  ];
+
+  var theme = Object.assign({ radius:16, cardMinWidth:220, gap:18, font:"'Manrope', system-ui, sans-serif" }, PRESETS[0]);
+  var activePreset = 0;
+
+  // ---------- Items (état du constructeur) ----------
+  var items = [
+    { image:'https://picsum.photos/seed/sgs-bague-1/600/600', name:'Bague Solitaire "Aube"', price:129 },
+    { image:'https://picsum.photos/seed/sgs-bracelet-2/600/600', name:'Bracelet Chaîne "Lueur"', price:79 },
+    { image:'https://picsum.photos/seed/sgs-collier-3/600/600', name:'Collier Pendentif "Éclat"', price:99 },
+    { image:'https://picsum.photos/seed/sgs-boucles-4/600/600', name:'Boucles "Goutte d\'Or"', price:59 }
+  ];
+
+  // ---------- Rendu des lignes du formulaire ----------
+  var rowsEl = document.getElementById('item-rows');
+
+  function renderRows(){
+    rowsEl.innerHTML = '';
+    items.forEach(function(it, idx){
+      var row = document.createElement('div');
+      row.className = 'item-row';
+
+      var img = document.createElement('input');
+      img.type = 'url'; img.placeholder = "Lien de l'image"; img.value = it.image;
+      img.addEventListener('input', function(e){ items[idx].image = e.target.value; updatePreview(); });
+
+      var name = document.createElement('input');
+      name.type = 'text'; name.placeholder = 'Nom de la création'; name.value = it.name;
+      name.addEventListener('input', function(e){ items[idx].name = e.target.value; updatePreview(); });
+
+      var price = document.createElement('input');
+      price.type = 'number'; price.placeholder = 'Prix'; price.value = it.price;
+      price.addEventListener('input', function(e){ items[idx].price = e.target.value; updatePreview(); });
+
+      var del = document.createElement('button');
+      del.className = 'remove-btn'; del.innerHTML = '&times;'; del.title = 'Retirer';
+      del.addEventListener('click', function(){ items.splice(idx,1); renderRows(); updatePreview(); });
+
+      row.appendChild(img); row.appendChild(name); row.appendChild(price); row.appendChild(del);
+      rowsEl.appendChild(row);
+    });
+  }
+
+  document.getElementById('add-item').addEventListener('click', function(){
+    items.push({ image:'', name:'', price:'' });
+    renderRows();
+    updatePreview();
+  });
+
+  // ---------- Palette UI ----------
+  var swatchesEl = document.getElementById('swatches');
+  PRESETS.forEach(function(p, i){
+    var s = document.createElement('div');
+    s.className = 'swatch' + (i===0 ? ' active' : '');
+    s.style.background = 'linear-gradient(135deg,' + p.accent + ',' + p.background + ')';
+    s.title = p.name;
+    s.addEventListener('click', function(){
+      theme.accent = p.accent; theme.background = p.background; theme.surface = p.surface; theme.text = p.text; theme.muted = p.muted;
+      activePreset = i;
+      document.querySelectorAll('.swatch').forEach(function(el,j){ el.classList.toggle('active', j===i); });
+      syncColorInputs();
+      updatePreview();
+    });
+    swatchesEl.appendChild(s);
+  });
+
+  var cAccent = document.getElementById('c-accent');
+  var cBg = document.getElementById('c-bg');
+  var cText = document.getElementById('c-text');
+  var cRadius = document.getElementById('c-radius');
+  var cSize = document.getElementById('c-size');
+
+  function syncColorInputs(){
+    cAccent.value = theme.accent; cBg.value = theme.background; cText.value = theme.text;
+  }
+  syncColorInputs();
+
+  cAccent.addEventListener('input', function(e){ theme.accent = e.target.value; updatePreview(); });
+  cBg.addEventListener('input', function(e){ theme.background = e.target.value; theme.surface = e.target.value; updatePreview(); });
+  cText.addEventListener('input', function(e){ theme.text = e.target.value; updatePreview(); });
+  cRadius.addEventListener('input', function(e){ theme.radius = parseInt(e.target.value,10); updatePreview(); });
+  cSize.addEventListener('input', function(e){ theme.cardMinWidth = parseInt(e.target.value,10); updatePreview(); });
+
+  // ---------- Aperçu + code ----------
+  var previewInstance = null;
+  var codeOutput = document.getElementById('code-output');
+
+  function escAttr(str){ return String(str).replace(/'/g,'&#39;'); }
+
+  function buildConfig(){
+    return {
+      title: 'Nos créations',
+      search: true,
+      sortable: true,
+      currency: 'EUR',
+      initialCount: 8,
+      loadStep: 8,
+      items: items.filter(function(it){ return it.image && it.name; }),
+      theme: {
+        accent: theme.accent, background: theme.background, surface: theme.surface,
+        text: theme.text, muted: theme.muted, radius: theme.radius, gap: theme.gap, cardMinWidth: theme.cardMinWidth
+      }
+    };
+  }
+
+  function updatePreview(){
+    var config = buildConfig();
+    var target = document.getElementById('sgs-preview');
+    if (previewInstance) { previewInstance.update(config); }
+    else { previewInstance = SGS.render(target, config); }
+    renderCode(config);
+  }
+
+  function renderCode(config){
+    var json = JSON.stringify(config);
+    var html =
+      '&lt;!-- SGS — Smart Gallery System --&gt;\n' +
+      '&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"sgs-gallery"</span>\n' +
+      '     <span class="attr">data-sgs</span>=\'' + escAttr(json) + '\'&gt;&lt;/<span class="tag">div</span>&gt;\n' +
+      '&lt;<span class="tag">script</span> <span class="attr">src</span>=<span class="str">"https://xewa.vercel.app/sgs-embed.js"</span>&gt;&lt;/<span class="tag">script</span>&gt;';
+    codeOutput.innerHTML = html;
+  }
+
+  document.getElementById('copy-btn').addEventListener('click', function(){
+    var config = buildConfig();
+    var jsonStr = JSON.stringify(config).replace(/'/g, "&#39;");
+    var text = '<div class="sgs-gallery" data-sgs=\'' + jsonStr + '\'></div>' + '\n' + '<script src="https://xewa.vercel.app/sgs-embed.js">' + '<' + '/script>';
+    navigator.clipboard.writeText(text).then(function(){
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = 'Copié ✓'; btn.classList.add('copied');
+      setTimeout(function(){ btn.textContent = 'Copier le code'; btn.classList.remove('copied'); }, 1800);
+    });
+  });
+
+  renderRows();
+  updatePreview();
+
+  // ---------- Hero mini demo ----------
+  SGS.render(document.getElementById('sgs-hero-demo'), {
+    search:false, sortable:false, initialCount:4, loadStep:4,
+    theme: { accent:'#E4B573', background:'#12151A', surface:'#1B1F26', text:'#EDEAE3', muted:'#9AA3B2', radius:16, cardMinWidth:150, gap:12 },
+    items: [
+      { image:'https://picsum.photos/seed/sgs-hero-1/400/400', name:'Bague "Aube"', price:129 },
+      { image:'https://picsum.photos/seed/sgs-hero-2/400/400', name:'Collier "Éclat"', price:99 },
+      { image:'https://picsum.photos/seed/sgs-hero-3/400/400', name:'Bracelet "Lueur"', price:79 },
+      { image:'https://picsum.photos/seed/sgs-hero-4/400/400', name:'Boucles "Or"', price:59 }
+    ]
+  });
+
+  // ---------- Exemple bijouterie ----------
+  SGS.render(document.getElementById('sgs-example'), {
+    title: 'Nos bijoux',
+    search: true, sortable: true, initialCount: 6, loadStep: 6,
+    currency:'EUR',
+    theme: { accent:'#B8874A', background:'#12151A', surface:'#1B1F26', text:'#EDEAE3', muted:'#9AA3B2', radius:18, cardMinWidth:210, gap:16 },
+    items: [
+      { image:'https://picsum.photos/seed/eclat-1/600/600', name:'Bague Solitaire Émeraude', price:189, badge:'Nouveau' },
+      { image:'https://picsum.photos/seed/eclat-2/600/600', name:'Bracelet Jonc Doré', price:95 },
+      { image:'https://picsum.photos/seed/eclat-3/600/600', name:'Collier Fine Chaîne', price:120 },
+      { image:'https://picsum.photos/seed/eclat-4/600/600', name:'Boucles Créoles', price:65 },
+      { image:'https://picsum.photos/seed/eclat-5/600/600', name:'Bague Alliance Torsadée', price:145 },
+      { image:'https://picsum.photos/seed/eclat-6/600/600', name:'Pendentif Cœur', price:88 },
+      { image:'https://picsum.photos/seed/eclat-7/600/600', name:'Bracelet Perles Naturelles', price:72, badge:'Fait main' },
+      { image:'https://picsum.photos/seed/eclat-8/600/600', name:'Bague Empilable Fine', price:59 }
+    ]
+  });
+})();
+</script>
+</body>
+</html>
