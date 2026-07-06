@@ -129,6 +129,18 @@
   .range-row{ display:flex; align-items:center; gap:12px; margin-top:14px; font-size:12.5px; color:var(--ash); }
   .range-row input[type=range]{ flex:1; accent-color: var(--brass); }
 
+  .layout-toggle{ display:flex; gap:8px; margin-bottom:4px; }
+  .layout-opt{ flex:1; padding:10px 8px; border-radius:10px; border:1px solid var(--glass-b); background:transparent; color:var(--ash); font-family:var(--body); font-size:12.5px; font-weight:700; cursor:pointer; transition: all .2s; }
+  .layout-opt.active{ border-color:var(--brass); color:var(--brass-bright); background:rgba(184,135,74,.1); }
+  .layout-opt:hover{ color:var(--text); }
+
+  .download-row{ margin-top:18px; padding:16px; border-radius:14px; background:rgba(184,135,74,.08); border:1px solid rgba(184,135,74,.3); }
+  .download-btn{ width:100%; padding:13px; border-radius:10px; border:none; background:linear-gradient(140deg, var(--brass-bright), var(--brass)); color:#191308; font-family:var(--body); font-weight:800; font-size:14px; cursor:pointer; transition: transform .2s, box-shadow .2s; box-shadow: 0 10px 26px -12px rgba(184,135,74,.7); }
+  .download-btn:hover{ transform: translateY(-2px); box-shadow: 0 16px 30px -12px rgba(184,135,74,.85); }
+  .download-btn.done{ background: linear-gradient(140deg, #8fd6ab, #6cc38f); }
+  .download-hint{ margin:10px 0 0; font-size:12px; color:var(--ash); line-height:1.5; }
+  .download-hint code{ color:var(--text); }
+
   .preview-shell{ background: var(--ink); border-radius: var(--radius); border:1px solid var(--glass-b); padding:6px; }
   .preview-frame{ border-radius: calc(var(--radius) - 6px); overflow:hidden; }
   #sgs-preview{ display:block; }
@@ -260,6 +272,18 @@
           <div class="color-field">Texte<input type="color" id="c-text"></div>
         </div>
 
+        <div class="divider"></div>
+
+        <h3>Affichage</h3>
+        <div class="layout-toggle" id="layout-toggle">
+          <button type="button" class="layout-opt active" data-layout="carousel">↔️ Défilement auto</button>
+          <button type="button" class="layout-opt" data-layout="grid">▦ Grille classique</button>
+        </div>
+
+        <div class="range-row" id="speed-row">
+          <span>Vitesse de défilement</span>
+          <input type="range" id="c-speed" min="1.5" max="6" step="0.1" value="3.2">
+        </div>
         <div class="range-row">
           <span>Coins arrondis</span>
           <input type="range" id="c-radius" min="0" max="32" value="16">
@@ -275,228 +299,16 @@
           <h3>Aperçu en direct</h3>
           <div class="preview-shell"><div class="preview-frame"><div id="sgs-preview"></div></div></div>
 
+          <div class="download-row">
+            <button class="download-btn" id="download-btn">📥 Télécharger mon fichier SGS personnalisé</button>
+            <p class="download-hint">Un seul fichier <code>.html</code>, prêt à coller ou à héberger tel quel : vos images, votre palette et le moteur SGS sont déjà à l'intérieur.</p>
+          </div>
+
           <div class="code-box" id="code">
-            <div class="code-tabs"><span class="code-tab">html · à coller sur votre site</span></div>
+            <div class="code-tabs"><span class="code-tab">ou copiez ce bloc dans une page qui charge déjà sgs-embed.js</span></div>
             <pre class="code" id="code-output"></pre>
             <div class="copy-row">
-              <small>Nécessite aussi le fichier <code>sgs-embed.js</code> (fourni), hébergé sur votre CDN ou celui de SGS.</small>
+              <small>Nécessite le fichier <code>sgs-embed.js</code> (fourni), hébergé sur votre site ou sur xewa.vercel.app.</small>
               <button class="copy-btn" id="copy-btn">Copier le code</button>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="exemple">
-  <div class="wrap">
-    <p class="kicker">Cas d'usage</p>
-    <h2>Le même système, sur une vraie boutique</h2>
-    <p class="section-sub">Exemple inspiré d'une bijouterie artisanale : SGS y remplace la grille d'images classique par une vitrine cliquable, avec zoom et navigation entre les pièces.</p>
-    <div class="example-frame">
-      <div id="sgs-example"></div>
-    </div>
-    <div class="example-credit">
-      <span>Démonstration inspirée du fonctionnement de <a href="https://eclat-dor-bijoux.netlify.app" target="_blank" rel="noopener">eclat-dor-bijoux.netlify.app</a> — images de démonstration, à remplacer par vos propres photos.</span>
-      <span>Propulsé par <a href="https://xewa.vercel.app" target="_blank" rel="noopener">SGS</a></span>
-    </div>
-  </div>
-</section>
-
-<footer id="code">
-  <div class="wrap">
-    <div class="foot-row">
-      <a href="https://xewa.vercel.app" target="_blank" rel="noopener" class="brand"><span class="mark"></span>SGS</a>
-      <div class="foot-links">
-        <a href="#fonctionnalites">Fonctionnalités</a>
-        <a href="#constructeur">Constructeur</a>
-        <a href="#exemple">Exemple</a>
-        <a href="https://xewa.vercel.app" target="_blank" rel="noopener">xewa.vercel.app</a>
-      </div>
-    </div>
-    <p class="foot-note">SGS — Smart Gallery System. Widget de démonstration. Le fichier <code>sgs-embed.js</code> fourni est le script réel utilisé sur cette page.</p>
-  </div>
-</footer>
-
-<script src="sgs-embed.js"></script>
-<script>
-(function(){
-  // ---------- Palettes ----------
-  var PRESETS = [
-    { name:'Vitrine Laiton', accent:'#B8874A', background:'#12151A', surface:'#1B1F26', text:'#EDEAE3', muted:'#9AA3B2' },
-    { name:'Or Rose', accent:'#D98E9B', background:'#171215', surface:'#241C20', text:'#F3E9E7', muted:'#b79ba0' },
-    { name:'Émeraude', accent:'#4E9A78', background:'#0F1613', surface:'#17211C', text:'#E7F0EC', muted:'#8fa79c' },
-    { name:'Saphir', accent:'#6E8FD6', background:'#10131C', surface:'#1A1F2E', text:'#E9ECF6', muted:'#8d97b8' },
-    { name:'Ivoire & Ardoise', accent:'#A9772F', background:'#F6F3EC', surface:'#FFFFFF', text:'#23201B', muted:'#8a8378' },
-    { name:'Corail & Sable', accent:'#D9724A', background:'#1B1712', surface:'#26201A', text:'#F3ECE2', muted:'#a89a8a' }
-  ];
-
-  var theme = Object.assign({ radius:16, cardMinWidth:220, gap:18, font:"'Manrope', system-ui, sans-serif" }, PRESETS[0]);
-  var activePreset = 0;
-
-  // ---------- Items (état du constructeur) ----------
-  var items = [
-    { image:'https://picsum.photos/seed/sgs-bague-1/600/600', name:'Bague Solitaire "Aube"', price:129 },
-    { image:'https://picsum.photos/seed/sgs-bracelet-2/600/600', name:'Bracelet Chaîne "Lueur"', price:79 },
-    { image:'https://picsum.photos/seed/sgs-collier-3/600/600', name:'Collier Pendentif "Éclat"', price:99 },
-    { image:'https://picsum.photos/seed/sgs-boucles-4/600/600', name:'Boucles "Goutte d\'Or"', price:59 }
-  ];
-
-  // ---------- Rendu des lignes du formulaire ----------
-  var rowsEl = document.getElementById('item-rows');
-
-  function renderRows(){
-    rowsEl.innerHTML = '';
-    items.forEach(function(it, idx){
-      var row = document.createElement('div');
-      row.className = 'item-row';
-
-      var img = document.createElement('input');
-      img.type = 'url'; img.placeholder = "Lien de l'image"; img.value = it.image;
-      img.addEventListener('input', function(e){ items[idx].image = e.target.value; updatePreview(); });
-
-      var name = document.createElement('input');
-      name.type = 'text'; name.placeholder = 'Nom de la création'; name.value = it.name;
-      name.addEventListener('input', function(e){ items[idx].name = e.target.value; updatePreview(); });
-
-      var price = document.createElement('input');
-      price.type = 'number'; price.placeholder = 'Prix'; price.value = it.price;
-      price.addEventListener('input', function(e){ items[idx].price = e.target.value; updatePreview(); });
-
-      var del = document.createElement('button');
-      del.className = 'remove-btn'; del.innerHTML = '&times;'; del.title = 'Retirer';
-      del.addEventListener('click', function(){ items.splice(idx,1); renderRows(); updatePreview(); });
-
-      row.appendChild(img); row.appendChild(name); row.appendChild(price); row.appendChild(del);
-      rowsEl.appendChild(row);
-    });
-  }
-
-  document.getElementById('add-item').addEventListener('click', function(){
-    items.push({ image:'', name:'', price:'' });
-    renderRows();
-    updatePreview();
-  });
-
-  // ---------- Palette UI ----------
-  var swatchesEl = document.getElementById('swatches');
-  PRESETS.forEach(function(p, i){
-    var s = document.createElement('div');
-    s.className = 'swatch' + (i===0 ? ' active' : '');
-    s.style.background = 'linear-gradient(135deg,' + p.accent + ',' + p.background + ')';
-    s.title = p.name;
-    s.addEventListener('click', function(){
-      theme.accent = p.accent; theme.background = p.background; theme.surface = p.surface; theme.text = p.text; theme.muted = p.muted;
-      activePreset = i;
-      document.querySelectorAll('.swatch').forEach(function(el,j){ el.classList.toggle('active', j===i); });
-      syncColorInputs();
-      updatePreview();
-    });
-    swatchesEl.appendChild(s);
-  });
-
-  var cAccent = document.getElementById('c-accent');
-  var cBg = document.getElementById('c-bg');
-  var cText = document.getElementById('c-text');
-  var cRadius = document.getElementById('c-radius');
-  var cSize = document.getElementById('c-size');
-
-  function syncColorInputs(){
-    cAccent.value = theme.accent; cBg.value = theme.background; cText.value = theme.text;
-  }
-  syncColorInputs();
-
-  cAccent.addEventListener('input', function(e){ theme.accent = e.target.value; updatePreview(); });
-  cBg.addEventListener('input', function(e){ theme.background = e.target.value; theme.surface = e.target.value; updatePreview(); });
-  cText.addEventListener('input', function(e){ theme.text = e.target.value; updatePreview(); });
-  cRadius.addEventListener('input', function(e){ theme.radius = parseInt(e.target.value,10); updatePreview(); });
-  cSize.addEventListener('input', function(e){ theme.cardMinWidth = parseInt(e.target.value,10); updatePreview(); });
-
-  // ---------- Aperçu + code ----------
-  var previewInstance = null;
-  var codeOutput = document.getElementById('code-output');
-
-  function escAttr(str){ return String(str).replace(/'/g,'&#39;'); }
-
-  function buildConfig(){
-    return {
-      title: 'Nos créations',
-      search: true,
-      sortable: true,
-      currency: 'EUR',
-      initialCount: 8,
-      loadStep: 8,
-      items: items.filter(function(it){ return it.image && it.name; }),
-      theme: {
-        accent: theme.accent, background: theme.background, surface: theme.surface,
-        text: theme.text, muted: theme.muted, radius: theme.radius, gap: theme.gap, cardMinWidth: theme.cardMinWidth
-      }
-    };
-  }
-
-  function updatePreview(){
-    var config = buildConfig();
-    var target = document.getElementById('sgs-preview');
-    if (previewInstance) { previewInstance.update(config); }
-    else { previewInstance = SGS.render(target, config); }
-    renderCode(config);
-  }
-
-  function renderCode(config){
-    var json = JSON.stringify(config);
-    var html =
-      '&lt;!-- SGS — Smart Gallery System --&gt;\n' +
-      '&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"sgs-gallery"</span>\n' +
-      '     <span class="attr">data-sgs</span>=\'' + escAttr(json) + '\'&gt;&lt;/<span class="tag">div</span>&gt;\n' +
-      '&lt;<span class="tag">script</span> <span class="attr">src</span>=<span class="str">"https://xewa.vercel.app/sgs-embed.js"</span>&gt;&lt;/<span class="tag">script</span>&gt;';
-    codeOutput.innerHTML = html;
-  }
-
-  document.getElementById('copy-btn').addEventListener('click', function(){
-    var config = buildConfig();
-    var jsonStr = JSON.stringify(config).replace(/'/g, "&#39;");
-    var text = '<div class="sgs-gallery" data-sgs=\'' + jsonStr + '\'></div>' + '\n' + '<script src="https://xewa.vercel.app/sgs-embed.js">' + '<' + '/script>';
-    navigator.clipboard.writeText(text).then(function(){
-      var btn = document.getElementById('copy-btn');
-      btn.textContent = 'Copié ✓'; btn.classList.add('copied');
-      setTimeout(function(){ btn.textContent = 'Copier le code'; btn.classList.remove('copied'); }, 1800);
-    });
-  });
-
-  renderRows();
-  updatePreview();
-
-  // ---------- Hero mini demo ----------
-  SGS.render(document.getElementById('sgs-hero-demo'), {
-    search:false, sortable:false, initialCount:4, loadStep:4,
-    theme: { accent:'#E4B573', background:'#12151A', surface:'#1B1F26', text:'#EDEAE3', muted:'#9AA3B2', radius:16, cardMinWidth:150, gap:12 },
-    items: [
-      { image:'https://picsum.photos/seed/sgs-hero-1/400/400', name:'Bague "Aube"', price:129 },
-      { image:'https://picsum.photos/seed/sgs-hero-2/400/400', name:'Collier "Éclat"', price:99 },
-      { image:'https://picsum.photos/seed/sgs-hero-3/400/400', name:'Bracelet "Lueur"', price:79 },
-      { image:'https://picsum.photos/seed/sgs-hero-4/400/400', name:'Boucles "Or"', price:59 }
-    ]
-  });
-
-  // ---------- Exemple bijouterie ----------
-  SGS.render(document.getElementById('sgs-example'), {
-    title: 'Nos bijoux',
-    search: true, sortable: true, initialCount: 6, loadStep: 6,
-    currency:'EUR',
-    theme: { accent:'#B8874A', background:'#12151A', surface:'#1B1F26', text:'#EDEAE3', muted:'#9AA3B2', radius:18, cardMinWidth:210, gap:16 },
-    items: [
-      { image:'https://picsum.photos/seed/eclat-1/600/600', name:'Bague Solitaire Émeraude', price:189, badge:'Nouveau' },
-      { image:'https://picsum.photos/seed/eclat-2/600/600', name:'Bracelet Jonc Doré', price:95 },
-      { image:'https://picsum.photos/seed/eclat-3/600/600', name:'Collier Fine Chaîne', price:120 },
-      { image:'https://picsum.photos/seed/eclat-4/600/600', name:'Boucles Créoles', price:65 },
-      { image:'https://picsum.photos/seed/eclat-5/600/600', name:'Bague Alliance Torsadée', price:145 },
-      { image:'https://picsum.photos/seed/eclat-6/600/600', name:'Pendentif Cœur', price:88 },
-      { image:'https://picsum.photos/seed/eclat-7/600/600', name:'Bracelet Perles Naturelles', price:72, badge:'Fait main' },
-      { image:'https://picsum.photos/seed/eclat-8/600/600', name:'Bague Empilable Fine', price:59 }
-    ]
-  });
-})();
-</script>
-</body>
-</html>
+          </d
