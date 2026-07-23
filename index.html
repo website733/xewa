@@ -3,312 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SGS — Smart Gallery System · Galerie embarquable pour créateurs</title>
-<meta name="description" content="SGS (Smart Gallery System) : la galerie embarquable, personnalisable par palette de couleurs, que créateurs et marques intègrent sur leur site pour présenter leurs créations, sans limite d'images.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Disquettes pour Yana 💌</title>
 <style>
-  :root{
-    --ink:#12151A;
-    --panel:#171B21;
-    --glass:rgba(255,255,255,.045);
-    --glass-b:rgba(255,255,255,.09);
-    --paper:#F6F3EC;
-    --brass:#B8874A;
-    --brass-bright:#E4B573;
-    --ash:#9AA3B2;
-    --text:#EDEAE3;
-    --radius:18px;
-    --display:'Fraunces', serif;
-    --body:'Manrope', system-ui, -apple-system, sans-serif;
-    --mono:'IBM Plex Mono', monospace;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0; background:var(--ink); color:var(--text); font-family:var(--body);
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;}
-  ::selection{ background: var(--brass); color:#12151A; }
-
-  /* ambient background texture */
-  body::before{
-    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
-    background:
-      radial-gradient(900px 500px at 12% -10%, rgba(184,135,74,.14), transparent 60%),
-      radial-gradient(700px 500px at 100% 10%, rgba(184,135,74,.08), transparent 60%);
-  }
-
-  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
-
-  /* NAV */
-  nav.top{ position:sticky; top:0; z-index:50; backdrop-filter: blur(14px); background: rgba(18,21,26,.72); border-bottom:1px solid var(--glass-b); }
-  nav.top .wrap{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; }
-  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:19px; letter-spacing:.01em; text-decoration:none; }
-  .brand .mark{ width:26px; height:26px; border-radius:7px; background: conic-gradient(from 200deg, var(--brass-bright), var(--brass), #6b4c22, var(--brass-bright)); box-shadow: 0 0 0 1px rgba(255,255,255,.15) inset; }
-  .navlinks{ display:flex; gap:28px; font-size:14px; font-weight:600; color:var(--ash);}
-  .navlinks a{ text-decoration:none; transition:color .2s;}
-  .navlinks a:hover{ color:var(--text); }
-  .btn{ display:inline-flex; align-items:center; gap:8px; border-radius:999px; font-weight:700; font-size:13.5px; padding:10px 20px; cursor:pointer; border:1px solid transparent; text-decoration:none; transition: transform .2s, box-shadow .2s, background .2s; }
-  .btn-brass{ background: linear-gradient(140deg, var(--brass-bright), var(--brass)); color:#191308; box-shadow: 0 10px 26px -12px rgba(184,135,74,.7);}
-  .btn-brass:hover{ transform:translateY(-2px); box-shadow: 0 16px 30px -12px rgba(184,135,74,.85); }
-  .btn-ghost{ background:transparent; border-color:var(--glass-b); color:var(--text); }
-  .btn-ghost:hover{ background:var(--glass); }
-  @media (max-width:760px){ .navlinks{display:none;} }
-
-  /* HERO */
-  header.hero{ padding: 84px 0 60px; position:relative; }
-  .hero-grid{ display:grid; grid-template-columns: 1.05fr .95fr; gap:56px; align-items:center; }
-  @media (max-width:960px){ .hero-grid{ grid-template-columns:1fr; } }
-  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--brass-bright); background:rgba(184,135,74,.12); border:1px solid rgba(184,135,74,.35); padding:7px 14px; border-radius:999px; margin-bottom:22px; }
-  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--brass-bright); box-shadow:0 0 10px var(--brass-bright); }
-  h1{ font-family:var(--display); font-size: clamp(38px, 5.4vw, 62px); line-height:1.03; font-weight:700; margin:0 0 22px; letter-spacing:-.01em; }
-  h1 em{ font-style:italic; color:var(--brass-bright); }
-  .lead{ font-size:17.5px; line-height:1.65; color:var(--ash); max-width:52ch; margin:0 0 32px; }
-  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:30px;}
-  .hero-stats{ display:flex; gap:34px; flex-wrap:wrap; }
-  .stat b{ display:block; font-family:var(--display); font-size:23px; color:var(--text); }
-  .stat span{ font-size:12.5px; color:var(--ash); }
-
-  .vitrine{ position:relative; border-radius: 26px; padding:20px; background: linear-gradient(160deg, var(--panel), #12151a); border:1px solid var(--glass-b); box-shadow: 0 40px 90px -40px rgba(0,0,0,.7); }
-  .vitrine::before{ content:''; position:absolute; inset:0; border-radius:26px; padding:1px; background: linear-gradient(160deg, rgba(228,181,115,.5), transparent 40%, rgba(228,181,115,.15)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none;}
-  .vitrine-tag{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; font-size:11.5px; color:var(--ash); font-family:var(--mono); }
-  .vitrine-tag .lights{ display:flex; gap:6px; }
-  .vitrine-tag .lights i{ width:8px; height:8px; border-radius:50%; display:inline-block; background:rgba(255,255,255,.18); }
-  #sgs-hero-demo{ display:block; }
-
-  /* SECTION generic */
-  section{ padding: 78px 0; position:relative; }
-  .kicker{ font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--brass-bright); margin:0 0 12px; }
-  h2{ font-family:var(--display); font-size: clamp(28px, 3.6vw, 40px); font-weight:700; margin:0 0 16px; letter-spacing:-.01em; }
-  .section-sub{ color:var(--ash); font-size:16px; max-width:60ch; line-height:1.6; margin:0 0 44px; }
-
-  /* STEPS */
-  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
-  @media (max-width:860px){ .steps{ grid-template-columns:1fr; } }
-  .step{ background:var(--glass); border:1px solid var(--glass-b); border-radius:var(--radius); padding:26px 24px; position:relative; }
-  .step .n{ font-family:var(--display); font-size:15px; color:var(--brass-bright); border:1px solid rgba(228,181,115,.4); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
-  .step h3{ font-size:17px; margin:0 0 8px; font-weight:700; }
-  .step p{ font-size:14.5px; color:var(--ash); line-height:1.55; margin:0; }
-
-  /* BUILDER */
-  .builder{ display:grid; grid-template-columns: 1fr 1.15fr; gap:30px; align-items:start; }
-  @media (max-width:980px){ .builder{ grid-template-columns:1fr; } }
-  .panel{ background:var(--panel); border:1px solid var(--glass-b); border-radius:var(--radius); padding:24px; }
-  .panel h3{ font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:var(--ash); margin:0 0 18px; font-weight:700; }
-
-  .item-row{ display:grid; grid-template-columns: 1fr 1fr 88px 30px; gap:8px; margin-bottom:9px; align-items:center; }
-  .item-row input{ width:100%; }
-  @media (max-width:560px){ .item-row{ grid-template-columns:1fr; } }
-
-  input[type=text], input[type=url], input[type=number], input[type=search]{
-    background:rgba(255,255,255,.04); border:1px solid var(--glass-b); color:var(--text);
-    padding:9px 11px; border-radius:9px; font-family:var(--body); font-size:13px; outline:none; transition:border-color .2s;
-  }
-  input:focus{ border-color:var(--brass); }
-  input::placeholder{ color:#5c6472; }
-
-  .remove-btn{ width:30px; height:30px; border-radius:8px; background:rgba(255,90,90,.08); border:1px solid rgba(255,90,90,.25); color:#ff8f8f; cursor:pointer; font-size:15px; line-height:1; display:flex; align-items:center; justify-content:center; }
-  .remove-btn:hover{ background:rgba(255,90,90,.16); }
-
-  .add-btn{ margin-top:6px; width:100%; padding:11px; border-radius:9px; border:1px dashed var(--glass-b); background:transparent; color:var(--ash); font-family:var(--body); font-weight:700; font-size:13px; cursor:pointer; transition: all .2s; }
-  .add-btn:hover{ border-color:var(--brass); color:var(--brass-bright); background:rgba(184,135,74,.06); }
-
-  .divider{ height:1px; background:var(--glass-b); margin:22px 0; }
-
-  .swatches{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
-  .swatch{ width:40px; height:40px; border-radius:11px; cursor:pointer; border:2px solid transparent; position:relative; transition: transform .15s; }
-  .swatch:hover{ transform: translateY(-2px); }
-  .swatch.active{ border-color:#fff; }
-  .custom-colors{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-  .color-field{ display:flex; flex-direction:column; gap:6px; font-size:11.5px; color:var(--ash); font-weight:600;}
-  .color-field input[type=color]{ width:100%; height:34px; border-radius:8px; border:1px solid var(--glass-b); background:transparent; padding:2px; cursor:pointer; }
-
-  .range-row{ display:flex; align-items:center; gap:12px; margin-top:14px; font-size:12.5px; color:var(--ash); }
-  .range-row input[type=range]{ flex:1; accent-color: var(--brass); }
-
-  .layout-toggle{ display:flex; gap:8px; margin-bottom:4px; }
-  .layout-opt{ flex:1; padding:10px 8px; border-radius:10px; border:1px solid var(--glass-b); background:transparent; color:var(--ash); font-family:var(--body); font-size:12.5px; font-weight:700; cursor:pointer; transition: all .2s; }
-  .layout-opt.active{ border-color:var(--brass); color:var(--brass-bright); background:rgba(184,135,74,.1); }
-  .layout-opt:hover{ color:var(--text); }
-
-  .download-row{ margin-top:18px; padding:16px; border-radius:14px; background:rgba(184,135,74,.08); border:1px solid rgba(184,135,74,.3); }
-  .download-btn{ width:100%; padding:13px; border-radius:10px; border:none; background:linear-gradient(140deg, var(--brass-bright), var(--brass)); color:#191308; font-family:var(--body); font-weight:800; font-size:14px; cursor:pointer; transition: transform .2s, box-shadow .2s; box-shadow: 0 10px 26px -12px rgba(184,135,74,.7); }
-  .download-btn:hover{ transform: translateY(-2px); box-shadow: 0 16px 30px -12px rgba(184,135,74,.85); }
-  .download-btn.done{ background: linear-gradient(140deg, #8fd6ab, #6cc38f); }
-  .download-hint{ margin:10px 0 0; font-size:12px; color:var(--ash); line-height:1.5; }
-  .download-hint code{ color:var(--text); }
-
-  .preview-shell{ background: var(--ink); border-radius: var(--radius); border:1px solid var(--glass-b); padding:6px; }
-  .preview-frame{ border-radius: calc(var(--radius) - 6px); overflow:hidden; }
-  #sgs-preview{ display:block; }
-
-  .code-box{ margin-top:18px; }
-  .code-tabs{ display:flex; gap:8px; margin-bottom:10px; }
-  .code-tab{ font-size:12px; font-family:var(--mono); padding:6px 12px; border-radius:7px; background:rgba(255,255,255,.05); color:var(--ash); cursor:default; border:1px solid var(--glass-b); }
-  pre.code{ background:#0D0F13; border:1px solid var(--glass-b); border-radius:12px; padding:18px; font-family:var(--mono); font-size:12.3px; line-height:1.65; color:#cfe0d8; overflow:auto; max-height:260px; margin:0; }
-  pre.code .tag{ color:#E4B573; }
-  pre.code .str{ color:#9ecbb0; }
-  pre.code .attr{ color:#7fb3e0; }
-  .copy-row{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; gap:10px; }
-  .copy-row small{ color:var(--ash); font-size:12px; }
-  .copy-btn{ background:var(--brass); color:#191308; border:none; padding:9px 18px; border-radius:999px; font-weight:800; font-size:12.5px; cursor:pointer; transition: transform .15s;}
-  .copy-btn:hover{ transform: translateY(-2px); }
-  .copy-btn.copied{ background: #6cc38f; }
-
-  /* EXAMPLE */
-  .example-frame{ background: var(--panel); border:1px solid var(--glass-b); border-radius: var(--radius); padding: 8px; }
-  .example-credit{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:18px; font-size:13px; color:var(--ash); }
-  .example-credit a{ color:var(--brass-bright); text-decoration:none; font-weight:700; }
-  .example-credit a:hover{ text-decoration:underline; }
-
-  /* FEATURES */
-  .features{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
-  @media (max-width:960px){ .features{ grid-template-columns:repeat(2,1fr);} }
-  @media (max-width:560px){ .features{ grid-template-columns:1fr;} }
-  .feature{ border:1px solid var(--glass-b); background:var(--glass); border-radius:14px; padding:20px; }
-  .feature .ico{ font-size:20px; margin-bottom:10px; }
-  .feature h4{ margin:0 0 6px; font-size:14.5px; }
-  .feature p{ margin:0; font-size:13px; color:var(--ash); line-height:1.5; }
-
-  footer{ border-top:1px solid var(--glass-b); padding: 40px 0; }
-  .foot-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
-  .foot-row .brand{ font-size:16px; }
-  .foot-links{ display:flex; gap:20px; font-size:13px; color:var(--ash); }
-  .foot-links a{ text-decoration:none; }
-  .foot-links a:hover{ color:var(--text); }
-  .foot-note{ margin-top:18px; font-size:12px; color:#5c6472; }
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#ff758c,#ff7eb3,#ffb199);
+  color:#fff;
+  padding:18px;
+}
+.container{max-width:620px;margin:auto}
+header{text-align:center;padding:20px 8px 16px}
+h1{font-size:clamp(28px,8vw,46px);margin:0 0 8px}
+.subtitle{font-size:16px;line-height:1.5;margin:0}
+.card{
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:22px;
+  padding:18px;
+  margin:14px 0;
+  box-shadow:0 8px 25px rgba(120,0,40,.18);
+}
+.card h2{font-size:20px;margin:0 0 14px}
+.line{
+  background:rgba(255,255,255,.94);
+  color:#8d214c;
+  border-radius:15px;
+  padding:16px;
+  margin:10px 0;
+  font-size:16px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+button{
+  width:100%;
+  border:0;
+  border-radius:15px;
+  padding:16px;
+  font-size:17px;
+  font-weight:bold;
+  color:#a32155;
+  background:#fff;
+  cursor:pointer;
+  margin-top:5px;
+}
+button:active{transform:scale(.98)}
+#result{
+  display:none;
+  margin-top:14px;
+  background:#fff;
+  color:#8d214c;
+  border-radius:16px;
+  padding:18px;
+  font-size:18px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+footer{text-align:center;font-size:13px;opacity:.9;padding:12px}
 </style>
 </head>
 <body>
-
-<nav class="top">
-  <div class="wrap">
-    <a href="https://xewa.vercel.app" target="_blank" rel="noopener" class="brand"><span class="mark"></span>SGS<span style="color:var(--ash); font-weight:500; font-size:12px; margin-left:4px;">smart gallery system</span></a>
-    <div class="navlinks">
-      <a href="#fonctionnalites">Fonctionnalités</a>
-      <a href="#constructeur">Constructeur</a>
-      <a href="#exemple">Exemple</a>
-      <a href="#code">Code</a>
-    </div>
-    <a href="#constructeur" class="btn btn-brass">Essayer SGS →</a>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <div class="eyebrow"><span class="dot"></span>Widget embarquable · xewa.vercel.app</div>
-      <h1>La vitrine de vos créations,<br><em>sur votre site.</em></h1>
-      <p class="lead">SGS transforme un simple lien d'image, un nom et un prix en une galerie professionnelle, illimitée en pièces, aux couleurs de votre marque — intégrable en deux lignes de code sur n'importe quel site.</p>
-      <div class="hero-ctas">
-        <a href="#constructeur" class="btn btn-brass">Créer ma galerie</a>
-        <a href="#exemple" class="btn btn-ghost">Voir un exemple réel</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat"><b>∞</b><span>images par galerie</span></div>
-        <div class="stat"><b>&lt; 2 min</b><span>d'intégration</span></div>
-        <div class="stat"><b>100%</b><span>couleurs personnalisables</span></div>
-      </div>
-    </div>
-    <div class="vitrine">
-      <div class="vitrine-tag">
-        <span>xewa.vercel.app/embed</span>
-        <span class="lights"><i></i><i></i><i></i></span>
-      </div>
-      <div id="sgs-hero-demo"></div>
-    </div>
-  </div>
+<div class="container">
+<header>
+  <h1>💌 Pour Yana</h1>
+  <p class="subtitle">Le petit générateur de disquettes de Kieran ✨</p>
 </header>
+ 
 
-<section id="fonctionnalites">
-  <div class="wrap">
-    <p class="kicker">Ce que fait SGS</p>
-    <h2>Une galerie pensée pour les créateurs, pas pour les développeurs</h2>
-    <p class="section-sub">Un seul champ à remplir par création : l'image, le nom, le prix. SGS s'occupe de la mise en page, des animations, du zoom plein écran et du chargement progressif — quel que soit le nombre de pièces.</p>
-    <div class="features">
-      <div class="feature"><div class="ico">🖼️</div><h4>Images illimitées</h4><p>Ajoutez autant de créations que vous voulez ; SGS charge le reste au clic sur « Voir plus », sans jamais ralentir votre site.</p></div>
-      <div class="feature"><div class="ico">🎨</div><h4>Palette sur mesure</h4><p>Accent, fond, texte : chaque couleur se personnalise pour matcher votre identité de marque, en un clic ou au pixel près.</p></div>
-      <div class="feature"><div class="ico">🔍</div><h4>Zoom & navigation</h4><p>Chaque création s'ouvre en grand avec navigation au clavier — l'expérience d'une vraie vitrine, pas d'une simple grille d'images.</p></div>
-      <div class="feature"><div class="ico">⚡</div><h4>2 lignes de code</h4><p>Une balise et un script. Aucune dépendance, aucun compte requis pour l'intégration technique, compatible avec tous les sites.</p></div>
-    </div>
-  </div>
+<section class="card">
+  <h2>🎲 Une phrase au hasard</h2>
+  <button onclick="generate()">✨ Donne-moi une disquette</button>
+  <div id="result"></div>
 </section>
 
-<section id="comment">
-  <div class="wrap">
-    <p class="kicker">Mise en route</p>
-    <h2>Trois étapes, dans l'ordre</h2>
-    <p class="section-sub">Le constructeur ci-dessous suit exactement ce parcours : renseignez vos pièces, choisissez vos couleurs, copiez le code généré.</p>
-    <div class="steps">
-      <div class="step"><div class="n">1</div><h3>Ajoutez vos créations</h3><p>Collez le lien de chaque image, donnez un nom et un prix. Aucune limite de nombre.</p></div>
-      <div class="step"><div class="n">2</div><h3>Choisissez votre palette</h3><p>Partez d'un préréglage ou réglez chaque couleur pour coller à votre charte graphique.</p></div>
-      <div class="step"><div class="n">3</div><h3>Collez le code</h3><p>Copiez le fragment généré dans votre site : la galerie apparaît, déjà en ligne.</p></div>
-    </div>
-  </div>
+<section class="card">
+  <h2>💬 Message direct pour Yana</h2>
+  <div class="line">« Yana, je vais être honnête : tu me plais vraiment. Je ne sais pas si c'est réciproque, mais j'avais envie de te le dire. — Kieran 💗 »</div>
 </section>
 
-<section id="constructeur">
-  <div class="wrap">
-    <p class="kicker">Constructeur en direct</p>
-    <h2>Composez votre galerie</h2>
-    <p class="section-sub">Tout ce que vous changez ici se reflète en temps réel dans l'aperçu et dans le code à copier.</p>
+<footer>Fait avec 💗 par Kieran pour Yana</footer>
+</div>
 
-    <div class="builder">
-      <div class="panel">
-        <h3>Vos créations</h3>
-        <div id="item-rows"></div>
-        <button class="add-btn" id="add-item">+ Ajouter une création</button>
+<script>
+const lines=[
+"Yana, tu es la preuve qu'une personne peut vraiment rendre une journée meilleure juste en apparaissant.",
+"Je ne sais pas ce qui est le plus beau chez toi : ton sourire ou l'effet qu'il a sur moi.",
+"Tu es devenue ma notification préférée.",
+"J'avais prévu de te sortir une disquette incroyable, mais dès que je te parle j'oublie tout.",
+"Yana, tu as quelque chose que les autres n'ont pas : mon attention.",
+"Je crois que tu es mon type... même si je ne savais pas que j'avais un type avant de te rencontrer.",
+"Je pourrais te dire que tu es belle, mais je pense que tu le sais déjà. Alors je vais te dire que tu es spéciale.",
+"Tu sais pourquoi j'aime bien te parler ? Parce que même une conversation simple avec toi devient importante.",
+"Si je devais choisir une personne avec qui parler toute la journée, je pense que mon choix serait assez évident.",
+"Yana, je crois que mon cœur a clairement un problème avec toi... il accélère dès que tu arrives."
+"Je crois que mon téléphone a un problème : dès que je vois ton prénom, mon sourire s'active tout seul."
+"Je voulais trouver une phrase originale pour te parler, mais finalement je préfère juste te dire que tu me plais." 
+"Tu sais ce qui est bizarre ? Même quand ma journée est moyenne, parler avec toi la rend meilleure."
+"Si être belle était un crime, tu serais recherchée dans tout le pays." 
 
-        <div class="divider"></div>
+];
 
-        <h3>Palette de couleurs</h3>
-        <div class="swatches" id="swatches"></div>
-        <div class="custom-colors">
-          <div class="color-field">Accent<input type="color" id="c-accent"></div>
-          <div class="color-field">Fond<input type="color" id="c-bg"></div>
-          <div class="color-field">Texte<input type="color" id="c-text"></div>
-        </div>
-
-        <div class="divider"></div>
-
-        <h3>Affichage</h3>
-        <div class="layout-toggle" id="layout-toggle">
-          <button type="button" class="layout-opt active" data-layout="carousel">↔️ Défilement auto</button>
-          <button type="button" class="layout-opt" data-layout="grid">▦ Grille classique</button>
-        </div>
-
-        <div class="range-row" id="speed-row">
-          <span>Vitesse de défilement</span>
-          <input type="range" id="c-speed" min="1.5" max="6" step="0.1" value="3.2">
-        </div>
-        <div class="range-row">
-          <span>Coins arrondis</span>
-          <input type="range" id="c-radius" min="0" max="32" value="16">
-        </div>
-        <div class="range-row">
-          <span>Taille des cartes</span>
-          <input type="range" id="c-size" min="160" max="320" value="220">
-        </div>
-      </div>
-
-      <div>
-        <div class="panel">
-          <h3>Aperçu en direct</h3>
-          <div class="preview-shell"><div class="preview-frame"><div id="sgs-preview"></div></div></div>
-
-          <div class="download-row">
-            <button class="download-btn" id="download-btn">📥 Télécharger mon fichier SGS personnalisé</button>
-            <p class="download-hint">Un seul fichier <code>.html</code>, prêt à coller ou à héberger tel quel : vos images, votre palette et le moteur SGS sont déjà à l'intérieur.</p>
-          </div>
-
-          <div class="code-box" id="code">
-            <div class="code-tabs"><span class="code-tab">ou copiez ce bloc dans une page qui charge déjà sgs-embed.js</span></div>
-            <pre class="code" id="code-output"></pre>
-            <div class="copy-row">
-              <small>Nécessite le fichier <code>sgs-embed.js</code> (fourni), hébergé sur votre site ou sur xewa.vercel.app.</small>
-              <button class="copy-btn" id="copy-btn">Copier le code</button>
-            </div>
-          </d
+function generate(){
+ const result=document.getElementById("result");
+ result.textContent=lines[Math.floor(Math.random()*lines.length)];
+ result.style.display="block";
+}
+</script>
+</body>
+</html>
