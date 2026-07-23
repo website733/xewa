@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html><html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Disquettes pour Yana 💌</title>
-<style>
+<title>Disquettes pour Yana 💌</title><style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   min-height:100vh;
@@ -14,10 +13,28 @@ body{
   color:#fff;
   padding:18px;
 }
-.container{max-width:620px;margin:auto}
-header{text-align:center;padding:20px 8px 16px}
-h1{font-size:clamp(28px,8vw,46px);margin:0 0 8px}
-.subtitle{font-size:16px;line-height:1.5;margin:0}
+
+.container{
+  max-width:620px;
+  margin:auto;
+}
+
+header{
+  text-align:center;
+  padding:20px 8px 16px;
+}
+
+h1{
+  font-size:clamp(28px,8vw,46px);
+  margin:0 0 8px;
+}
+
+.subtitle{
+  font-size:16px;
+  line-height:1.5;
+  margin:0;
+}
+
 .card{
   background:rgba(255,255,255,.18);
   backdrop-filter:blur(12px);
@@ -27,7 +44,12 @@ h1{font-size:clamp(28px,8vw,46px);margin:0 0 8px}
   margin:14px 0;
   box-shadow:0 8px 25px rgba(120,0,40,.18);
 }
-.card h2{font-size:20px;margin:0 0 14px}
+
+.card h2{
+  font-size:20px;
+  margin:0 0 14px;
+}
+
 .line{
   background:rgba(255,255,255,.94);
   color:#8d214c;
@@ -39,6 +61,7 @@ h1{font-size:clamp(28px,8vw,46px);margin:0 0 8px}
   overflow-wrap:anywhere;
   word-break:normal;
 }
+
 button{
   width:100%;
   border:0;
@@ -51,7 +74,11 @@ button{
   cursor:pointer;
   margin-top:5px;
 }
-button:active{transform:scale(.98)}
+
+button:active{
+  transform:scale(.98);
+}
+
 #result{
   display:none;
   margin-top:14px;
@@ -63,68 +90,72 @@ button:active{transform:scale(.98)}
   line-height:1.55;
   overflow-wrap:anywhere;
 }
-footer{text-align:center;font-size:13px;opacity:.9;padding:12px}
-</style>
-</head>
-<body>
-<div class="container">
-<header>
+
+footer{
+  text-align:center;
+  font-size:13px;
+  opacity:.9;
+  padding:12px;
+}
+</style></head><body><div class="container"><header>
   <h1>💌 Pour Yana</h1>
   <p class="subtitle">Le petit générateur de disquettes de Kieran ✨</p>
-</header>
- 
+</header><section class="card">
+  <h2>🎲 Une phrase au hasard</h2>  <button onclick="generate()">
+    ✨ Donne-moi une disquette
+  </button>  <div id="result"></div>
+</section><section class="card">
+  <h2>💬 Message direct pour Yana</h2>  <div class="line">
+    « Yana, je vais être honnête : tu me plais vraiment. Je ne sais pas si c'est réciproque, mais j'avais envie de te le dire. — Kieran 💗 »
+  </div>
+</section><footer>
+  Fait avec 💗 par Kieran pour Yana
+</footer></div><script>
 
-<section class="card">
-  <h2>🎲 Une phrase au hasard</h2>
-  <button onclick="generate()">✨ Donne-moi une disquette</button>
-  <div id="result"></div>
-</section>
+const lines = [
 
-<section class="card">
-  <h2>💬 Message direct pour Yana</h2>
-  <div class="line">« Yana, je vais être honnête : tu me plais vraiment. Je ne sais pas si c'est réciproque, mais j'avais envie de te le dire. — Kieran 💗 »</div>
-</section>
+  "Yana, tu es la preuve qu'une personne peut vraiment rendre une journée meilleure juste en apparaissant.",
 
-<footer>Fait avec 💗 par Kieran pour Yana</footer>
-</div>
+  "Je ne sais pas ce qui est le plus beau chez toi : ton sourire ou l'effet qu'il a sur moi.",
 
-<script>
-const lines=[
-"Yana, tu es la preuve qu'une personne peut vraiment rendre une journée meilleure juste en apparaissant.",
+  "Tu es devenue ma notification préférée.",
 
-"Je ne sais pas ce qui est le plus beau chez toi : ton sourire ou l'effet qu'il a sur moi.",
+  "J'avais prévu de te sortir une disquette incroyable, mais dès que je te parle j'oublie tout.",
 
-"Tu es devenue ma notification préférée.",
+  "Yana, tu as quelque chose que les autres n'ont pas : mon attention.",
 
-"J'avais prévu de te sortir une disquette incroyable, mais dès que je te parle j'oublie tout.",
+  "Je crois que tu es mon type... même si je ne savais pas que j'avais un type avant de te rencontrer.",
 
-"Yana, tu as quelque chose que les autres n'ont pas : mon attention.",
+  "Je pourrais te dire que tu es belle, mais je pense que tu le sais déjà. Alors je vais te dire que tu es spéciale.",
 
-"Je crois que tu es mon type... même si je ne savais pas que j'avais un type avant de te rencontrer.",
+  "Tu sais pourquoi j'aime bien te parler ? Parce que même une conversation simple avec toi devient importante.",
 
-"Je pourrais te dire que tu es belle, mais je pense que tu le sais déjà. Alors je vais te dire que tu es spéciale.",
+  "Si je devais choisir une personne avec qui parler toute la journée, je pense que mon choix serait assez évident.",
 
-"Tu sais pourquoi j'aime bien te parler ? Parce que même une conversation simple avec toi devient importante.",
+  "Yana, je crois que mon cœur a clairement un problème avec toi... il accélère dès que tu arrives.",
 
-"Si je devais choisir une personne avec qui parler toute la journée, je pense que mon choix serait assez évident.",
+  "Je crois que mon téléphone a un problème : dès que je vois ton prénom, mon sourire s'active tout seul.",
 
-"Yana, je crois que mon cœur a clairement un problème avec toi... il accélère dès que tu arrives."
+  "Je voulais trouver une phrase originale pour te parler, mais finalement je préfère juste te dire que tu me plais.",
 
-"Je crois que mon téléphone a un problème : dès que je vois ton prénom, mon sourire s'active tout seul."
+  "Tu sais ce qui est bizarre ? Même quand ma journée est moyenne, parler avec toi la rend meilleure.",
 
-"Je voulais trouver une phrase originale pour te parler, mais finalement je préfère juste te dire que tu me plais." 
-
-"Tu sais ce qui est bizarre ? Même quand ma journée est moyenne, parler avec toi la rend meilleure."
-
-"Si être belle était un crime, tu serais recherchée dans tout le pays." 
+  "Si être belle était un crime, tu serais recherchée dans tout le pays."
 
 ];
 
 function generate(){
- const result=document.getElementById("result");
- result.textContent=lines[Math.floor(Math.random()*lines.length)];
- result.style.display="block";
+
+  const result = document.getElementById("result");
+
+  const randomLine =
+    lines[Math.floor(Math.random() * lines.length)];
+
+  result.textContent = randomLine;
+
+  result.style.display = "block";
+
 }
-</script>
-</body>
+
+</script></body>
 </html>
