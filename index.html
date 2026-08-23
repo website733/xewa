@@ -1,90 +1,105 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Nearby Explorer</title>
+<title>Nearby Explorer Free</title>
+
+
+<link 
+rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"
+/>
+
 
 <style>
 
-*{
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-
 body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    flex-direction:column;
+margin:0;
+font-family:Arial;
+height:100vh;
+display:flex;
+flex-direction:column;
 }
 
 
 header{
-    background:#111;
-    color:white;
-    padding:15px;
-    font-size:22px;
-    font-weight:bold;
+
+background:#111;
+color:white;
+padding:15px;
+font-size:22px;
+font-weight:bold;
+
 }
 
 
 .search{
-    padding:15px;
-    display:flex;
-    gap:10px;
+
+padding:10px;
+display:flex;
+gap:10px;
+
 }
 
 
 input{
-    flex:1;
-    padding:12px;
-    border-radius:8px;
-    border:1px solid #ccc;
+
+flex:1;
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+
 }
 
 
 button{
-    background:#2563eb;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:8px;
-    cursor:pointer;
+
+background:#2563eb;
+color:white;
+border:none;
+border-radius:8px;
+padding:12px 20px;
+cursor:pointer;
+
 }
 
 
-.container{
-    flex:1;
-    display:flex;
+.main{
+
+display:flex;
+flex:1;
+
 }
 
 
 #map{
-    flex:2;
+
+flex:2;
+
 }
 
 
-#places{
-    flex:1;
-    overflow:auto;
-    padding:15px;
+#results{
+
+flex:1;
+overflow:auto;
+padding:15px;
+
 }
 
 
 .card{
-    padding:15px;
-    border-radius:12px;
-    margin-bottom:10px;
-    box-shadow:0 2px 8px #ccc;
+
+background:white;
+box-shadow:0 2px 8px #ccc;
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+
 }
-
-
-.card h3{
-    margin:0 0 8px;
-}
-
 
 </style>
 
@@ -95,38 +110,44 @@ button{
 
 
 <header>
-📍 Nearby Explorer
+🌍 Nearby Explorer Free
 </header>
 
 
 <div class="search">
 
 <input 
-id="query"
+id="search"
 placeholder="Restaurant, magasin, café..."
 >
 
-<button onclick="searchPlaces()">
-Rechercher
+
+<button onclick="findPlaces()">
+Chercher
 </button>
 
 </div>
 
 
-<div class="container">
+<div class="main">
 
 <div id="map"></div>
 
-<div id="places">
+
+<div id="results">
 
 <h2>
-Résultats
+Lieux proches
 </h2>
 
 </div>
 
+
 </div>
 
+
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 
 <script>
@@ -134,161 +155,217 @@ Résultats
 
 let map;
 
-let userPosition;
-
-let service;
+let userLocation;
 
 let markers=[];
 
 
 
-function initMap(){
+// Initialisation carte
+
+function start(){
 
 
 navigator.geolocation.getCurrentPosition(
 
-(position)=>{
+pos=>{
 
 
-userPosition={
+userLocation={
 
-lat:position.coords.latitude,
+lat:pos.coords.latitude,
 
-lng:position.coords.longitude
+lng:pos.coords.longitude
 
 };
 
 
 
-map = new google.maps.Map(
-document.getElementById("map"),
+map=L.map('map')
+.setView(
+[
+userLocation.lat,
+userLocation.lng
+],
+15
+);
+
+
+
+L.tileLayer(
+
+'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+
 {
 
-center:userPosition,
+maxZoom:19
 
-zoom:15
+}
 
-});
-
-
-
-new google.maps.Marker({
-
-map:map,
-
-position:userPosition,
-
-title:"Votre position",
-
-icon:
-"https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-
-});
+).addTo(map);
 
 
 
-service =
-new google.maps.places.PlacesService(map);
+L.marker(
+[
+userLocation.lat,
+userLocation.lng
+]
+)
+
+.addTo(map)
+
+.bindPopup(
+"📍 Vous êtes ici"
+)
+
+.openPopup();
+
 
 
 },
 
-(error)=>{
-
+()=>{
 
 alert(
-"Impossible d'obtenir votre position"
+"Autorisez la localisation"
+);
+
+}
+
+
 );
 
 
 }
 
-);
-
-
-}
 
 
 
-
-function searchPlaces(){
-
-
-let keyword =
-document.getElementById("query").value;
+async function findPlaces(){
 
 
-if(!keyword || !userPosition)
+let query =
+document.getElementById("search").value;
+
+
+
+if(!query)
 return;
+
+
+
+let radius=3000;
+
+
+
+let url=
+
+`
+https://overpass-api.de/api/interpreter?data=
+
+[out:json];
+
+(
+
+node
+
+["name"]
+["${query}"]
+
+(around:${radius},
+
+${userLocation.lat},
+
+${userLocation.lng});
+
+
+
+way
+
+["name"]
+["${query}"]
+
+(around:${radius},
+
+${userLocation.lat},
+
+${userLocation.lng});
+
+);
+
+out center;
+
+`;
+
+
+
+let response =
+await fetch(url);
+
+
+
+let data =
+await response.json();
+
+
+
+showResults(
+data.elements
+);
+
+
+
+}
+
+
+
+
+
+function showResults(places){
+
+
+document.getElementById("results").innerHTML=
+"<h2>Lieux trouvés</h2>";
 
 
 
 clearMarkers();
 
 
-service.nearbySearch(
 
-{
-
-location:userPosition,
-
-radius:3000,
-
-keyword:keyword
-
-},
-
-(results,status)=>{
+places.forEach(place=>{
 
 
-if(
-status !== google.maps.places.PlacesServiceStatus.OK
-)
-return;
+let lat =
+place.lat || place.center.lat;
+
+
+let lng =
+place.lon || place.center.lon;
 
 
 
-displayPlaces(results);
+let name =
+place.tags.name;
 
-
-
-}
-
-);
-
-
-}
-
-
-
-
-function displayPlaces(results){
-
-
-let container =
-document.getElementById("places");
-
-
-container.innerHTML =
-"<h2>Résultats</h2>";
-
-
-
-results.forEach(place=>{
 
 
 let marker =
-new google.maps.Marker({
+L.marker(
+[
+lat,
+lng
+]
 
-map:map,
+)
 
-position:
-place.geometry.location,
+.addTo(map)
 
-title:
-place.name
+.bindPopup(
+name
+);
 
-});
 
 
 markers.push(marker);
@@ -298,26 +375,30 @@ markers.push(marker);
 let card =
 document.createElement("div");
 
+
 card.className="card";
 
+card.innerHTML=
 
-card.innerHTML=`
+`
 
-<h3>${place.name}</h3>
-
-<p>
-${place.vicinity || ""}
-</p>
+<h3>${name}</h3>
 
 <p>
-⭐ ${place.rating || "Pas de note"}
+${place.tags.amenity || place.tags.shop || "Lieu"}
 </p>
+
+<button onclick="go(${lat},${lng})">
+Voir sur carte
+</button>
 
 `;
 
 
 
-container.appendChild(card);
+document
+.getElementById("results")
+.appendChild(card);
 
 
 
@@ -329,27 +410,35 @@ container.appendChild(card);
 
 
 
-function clearMarkers(){
+function go(lat,lng){
 
-
-markers.forEach(
-marker=>marker.setMap(null)
+map.setView(
+[
+lat,
+lng
+],
+18
 );
-
-
-markers=[];
-
 
 }
 
 
 
-</script>
+function clearMarkers(){
+
+markers.forEach(
+m=>map.removeLayer(m)
+);
+
+markers=[];
+
+}
 
 
 
-<script async
-src="https://maps.googleapis.com/maps/api/js?key=VOTRE_CLE_API&libraries=places&callback=initMap">
+start();
+
+
 </script>
 
 
