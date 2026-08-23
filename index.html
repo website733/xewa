@@ -1,161 +1,357 @@
-<!DOCTYPE html><html lang="fr">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Disquettes pour Yana 💌</title><style>
-*{box-sizing:border-box}
+
+<title>Nearby Explorer</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
 body{
-  margin:0;
-  min-height:100vh;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#ff758c,#ff7eb3,#ffb199);
-  color:#fff;
-  padding:18px;
+    margin:0;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
 }
 
-.container{
-  max-width:620px;
-  margin:auto;
-}
 
 header{
-  text-align:center;
-  padding:20px 8px 16px;
+    background:#111;
+    color:white;
+    padding:15px;
+    font-size:22px;
+    font-weight:bold;
 }
 
-h1{
-  font-size:clamp(28px,8vw,46px);
-  margin:0 0 8px;
+
+.search{
+    padding:15px;
+    display:flex;
+    gap:10px;
 }
 
-.subtitle{
-  font-size:16px;
-  line-height:1.5;
-  margin:0;
+
+input{
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
 }
 
-.card{
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.35);
-  border-radius:22px;
-  padding:18px;
-  margin:14px 0;
-  box-shadow:0 8px 25px rgba(120,0,40,.18);
-}
-
-.card h2{
-  font-size:20px;
-  margin:0 0 14px;
-}
-
-.line{
-  background:rgba(255,255,255,.94);
-  color:#8d214c;
-  border-radius:15px;
-  padding:16px;
-  margin:10px 0;
-  font-size:16px;
-  line-height:1.5;
-  overflow-wrap:anywhere;
-  word-break:normal;
-}
 
 button{
-  width:100%;
-  border:0;
-  border-radius:15px;
-  padding:16px;
-  font-size:17px;
-  font-weight:bold;
-  color:#a32155;
-  background:#fff;
-  cursor:pointer;
-  margin-top:5px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
 }
 
-button:active{
-  transform:scale(.98);
+
+.container{
+    flex:1;
+    display:flex;
 }
 
-#result{
-  display:none;
-  margin-top:14px;
-  background:#fff;
-  color:#8d214c;
-  border-radius:16px;
-  padding:18px;
-  font-size:18px;
-  line-height:1.55;
-  overflow-wrap:anywhere;
+
+#map{
+    flex:2;
 }
 
-footer{
-  text-align:center;
-  font-size:13px;
-  opacity:.9;
-  padding:12px;
-}
-</style></head><body><div class="container"><header>
-  <h1>💌 Pour Yana</h1>
-  <p class="subtitle">Le petit générateur de disquettes de Kieran ✨</p>
-</header><section class="card">
-  <h2>🎲 Une phrase au hasard</h2>  <button onclick="generate()">
-    ✨ Donne-moi une disquette
-  </button>  <div id="result"></div>
-</section><section class="card">
-  <h2>💬 Message pour Yana</h2>  <div class="line">
-    « Yana, je vais être honnête : tu me plais vraiment. Je ne sais pas si c'est réciproque, mais j'avais envie de te le dire. — Kieran 💗 »
-  </div>
-</section><footer>
-  Fait avec 💗 par Kieran pour Yana
-</footer></div><script>
 
-const lines = [
-
-  "Yana, tu es la preuve qu'une personne peut vraiment rendre une journée meilleure juste en apparaissant.",
-
-  "Je ne sais pas ce qui est le plus beau chez toi : ton sourire ou l'effet qu'il a sur moi.",
-
-  "Tu es devenue ma notification préférée.",
-
-  "J'avais prévu de te sortir une disquette incroyable, mais dès que je te parle j'oublie tout.",
-
-  "Yana, tu as quelque chose que les autres n'ont pas : mon attention.",
-
-  "Je crois que tu es mon type... même si je ne savais pas que j'avais un type avant de te rencontrer.",
-
-  "Je pourrais te dire que tu es belle, mais je pense que tu le sais déjà. Alors je vais te dire que tu es spéciale.",
-
-  "Tu sais pourquoi j'aime bien te parler ? Parce que même une conversation simple avec toi devient importante.",
-
-  "Si je devais choisir une personne avec qui parler toute la journée, je pense que mon choix serait assez évident.",
-
-  "Yana, je crois que mon cœur a clairement un problème avec toi... il accélère dès que tu arrives.",
-
-  "Je crois que mon téléphone a un problème : dès que je vois ton prénom, mon sourire s'active tout seul.",
-
-  "Je voulais trouver une phrase originale pour te parler, mais finalement je préfère juste te dire que tu me plais.",
-
-  "Tu sais ce qui est bizarre ? Même quand ma journée est moyenne, parler avec toi la rend meilleure.",
-
-  "Si être belle était un crime, tu serais recherchée dans tout le pays."
-
-];
-
-function generate(){
-
-  const result = document.getElementById("result");
-
-  const randomLine =
-    lines[Math.floor(Math.random() * lines.length)];
-
-  result.textContent = randomLine;
-
-  result.style.display = "block";
-
+#places{
+    flex:1;
+    overflow:auto;
+    padding:15px;
 }
 
-</script></body>
+
+.card{
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:10px;
+    box-shadow:0 2px 8px #ccc;
+}
+
+
+.card h3{
+    margin:0 0 8px;
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+📍 Nearby Explorer
+</header>
+
+
+<div class="search">
+
+<input 
+id="query"
+placeholder="Restaurant, magasin, café..."
+>
+
+<button onclick="searchPlaces()">
+Rechercher
+</button>
+
+</div>
+
+
+<div class="container">
+
+<div id="map"></div>
+
+<div id="places">
+
+<h2>
+Résultats
+</h2>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+let map;
+
+let userPosition;
+
+let service;
+
+let markers=[];
+
+
+
+function initMap(){
+
+
+navigator.geolocation.getCurrentPosition(
+
+(position)=>{
+
+
+userPosition={
+
+lat:position.coords.latitude,
+
+lng:position.coords.longitude
+
+};
+
+
+
+map = new google.maps.Map(
+document.getElementById("map"),
+{
+
+center:userPosition,
+
+zoom:15
+
+});
+
+
+
+new google.maps.Marker({
+
+map:map,
+
+position:userPosition,
+
+title:"Votre position",
+
+icon:
+"https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+
+});
+
+
+
+service =
+new google.maps.places.PlacesService(map);
+
+
+},
+
+(error)=>{
+
+
+alert(
+"Impossible d'obtenir votre position"
+);
+
+
+}
+
+);
+
+
+}
+
+
+
+
+function searchPlaces(){
+
+
+let keyword =
+document.getElementById("query").value;
+
+
+if(!keyword || !userPosition)
+return;
+
+
+
+clearMarkers();
+
+
+service.nearbySearch(
+
+{
+
+location:userPosition,
+
+radius:3000,
+
+keyword:keyword
+
+},
+
+(results,status)=>{
+
+
+if(
+status !== google.maps.places.PlacesServiceStatus.OK
+)
+return;
+
+
+
+displayPlaces(results);
+
+
+
+}
+
+);
+
+
+}
+
+
+
+
+function displayPlaces(results){
+
+
+let container =
+document.getElementById("places");
+
+
+container.innerHTML =
+"<h2>Résultats</h2>";
+
+
+
+results.forEach(place=>{
+
+
+let marker =
+new google.maps.Marker({
+
+map:map,
+
+position:
+place.geometry.location,
+
+title:
+place.name
+
+});
+
+
+markers.push(marker);
+
+
+
+let card =
+document.createElement("div");
+
+card.className="card";
+
+
+card.innerHTML=`
+
+<h3>${place.name}</h3>
+
+<p>
+${place.vicinity || ""}
+</p>
+
+<p>
+⭐ ${place.rating || "Pas de note"}
+</p>
+
+`;
+
+
+
+container.appendChild(card);
+
+
+
+});
+
+
+}
+
+
+
+
+function clearMarkers(){
+
+
+markers.forEach(
+marker=>marker.setMap(null)
+);
+
+
+markers=[];
+
+
+}
+
+
+
+</script>
+
+
+
+<script async
+src="https://maps.googleapis.com/maps/api/js?key=VOTRE_CLE_API&libraries=places&callback=initMap">
+</script>
+
+
+</body>
 </html>
